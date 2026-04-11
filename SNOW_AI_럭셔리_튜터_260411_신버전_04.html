@@ -1,0 +1,3029 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SNOW AI 영어 튜터</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f0f14;
+  --surface: #1a1a24;
+  --surface2: #22222f;
+  --border: rgba(255,255,255,0.08);
+  --text: #f0f0f5;
+  --text-muted: #888899;
+  --accent: #7c6ff7;
+  --accent2: #4ecdc4;
+  --accent3: #ff6b9d;
+  --gold: #f5c842;
+  --green: #56d364;
+  --card-shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: 'Plus Jakarta Sans', 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+}
+
+/* ── APP SHELL ── */
+.app {
+  width: 100%;
+  max-width: 430px;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+/* ── HEADER ── */
+.app-header {
+  flex-shrink: 0;
+  padding: 14px 18px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  z-index: 10;
+}
+.app-logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px;
+  letter-spacing: 1px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.header-btn {
+  width: 38px; height: 38px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ── BOTTOM NAV BAR ── */
+.nav-bar {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  display: flex;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 5px 2px calc(5px + env(safe-area-inset-bottom));
+  z-index: 100;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  gap: 0px;
+  -webkit-overflow-scrolling: touch;
+  user-select: none;
+  cursor: grab;
+}
+.nav-bar.dragging { cursor: grabbing; }
+.nav-bar::-webkit-scrollbar { display: none; }
+.nav-item {
+  flex: 0 0 auto;
+  width: 58px;
+  padding: 5px 2px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 9px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s, color 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+}
+.nav-item .nav-icon { font-size: 18px; line-height: 1; }
+.nav-item.active {
+  color: var(--accent);
+  background: rgba(124,111,247,0.12);
+}
+.nav-item.active .nav-icon { filter: drop-shadow(0 0 6px rgba(124,111,247,0.7)); }
+
+/* ── CONTENT ── */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 16px 130px;
+  scroll-behavior: smooth;
+}
+.tab-panel { display: none; }
+.tab-panel.active { display: block; animation: fadeUp 0.3s ease; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── CARDS ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 18px;
+  margin-bottom: 14px;
+  box-shadow: var(--card-shadow);
+}
+.card-accent-left { border-left: 4px solid var(--accent); }
+.card-accent-green { border-left: 4px solid var(--green); }
+.card-accent-gold { border-left: 4px solid var(--gold); }
+
+/* ── INPUTS ── */
+.input-field {
+  width: 100%;
+  padding: 14px 16px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  color: var(--text);
+  font-size: 15px;
+  font-family: inherit;
+  outline: none;
+  transition: border 0.2s;
+  margin-bottom: 12px;
+}
+.input-field:focus { border-color: var(--accent); }
+.input-field::placeholder { color: var(--text-muted); }
+
+textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
+
+/* ── BUTTONS ── */
+.btn-primary {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(135deg, var(--accent), #5d56d4);
+  border: none;
+  border-radius: 14px;
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(124,111,247,0.4);
+  transition: all 0.2s;
+  margin-bottom: 12px;
+}
+.btn-primary:active { transform: scale(0.98); }
+
+.btn-green {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(135deg, #2dba72, #1a9d5f);
+  border: none;
+  border-radius: 14px;
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(45,186,114,0.3);
+  transition: all 0.2s;
+  margin-bottom: 12px;
+}
+
+.btn-ghost {
+  padding: 9px 16px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-ghost:hover, .btn-ghost.active-speed { background: var(--accent); color: white; border-color: var(--accent); }
+
+.btn-save {
+  width: 100%;
+  padding: 13px;
+  background: transparent;
+  border: 1px solid var(--accent3);
+  border-radius: 12px;
+  color: var(--accent3);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 6px;
+}
+.btn-save:active { background: var(--accent3); color: white; }
+
+/* ── TRANSLATE RESULT ── */
+.eng-sentence {
+  font-family: 'DM Serif Display', serif;
+  font-size: 26px;
+  line-height: 1.4;
+  color: var(--text);
+  word-break: break-word;
+}
+.word-tap {
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+  border-bottom: 2px solid rgba(124,111,247,0.5);
+  transition: all 0.15s;
+  color: #c8c5ff;
+}
+.word-tap:active { color: var(--accent); border-bottom-color: var(--accent); }
+
+.speed-row { display: flex; gap: 8px; margin-top: 14px; }
+.speed-row .btn-ghost { flex: 1; text-align: center; }
+
+.chunk-box {
+  background: var(--surface2);
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.8;
+  margin-top: 14px;
+}
+.chunk-sep { color: var(--accent); margin: 0 4px; }
+
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.guide-card {
+  background: var(--surface2);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  border-left: 3px solid var(--accent3);
+}
+.guide-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent3);
+  margin-bottom: 6px;
+}
+.guide-desc { font-size: 13px; color: #ccc; line-height: 1.6; }
+
+.example-row {
+  padding: 11px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+.example-row:last-child { border-bottom: none; }
+.example-eng { font-size: 14px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 6px; }
+.example-kor { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+.speak-icon { font-size: 12px; color: var(--accent2); }
+
+.badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.badge-basic { background: rgba(86,211,100,0.15); color: var(--green); }
+.badge-up { background: rgba(124,111,247,0.15); color: var(--accent); }
+
+.quiz-option {
+  padding: 14px 16px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.15s;
+  display: flex; align-items: center; gap: 10px;
+}
+.quiz-option:active { transform: scale(0.99); }
+.quiz-option.correct { border-color: var(--green); background: rgba(86,211,100,0.1); color: var(--green); }
+.quiz-option.wrong { border-color: var(--accent3); background: rgba(255,107,157,0.1); color: var(--accent3); }
+.quiz-option-num {
+  width: 24px; height: 24px;
+  background: var(--border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; flex-shrink: 0;
+}
+
+/* ── DIARY ── */
+.diary-corrected {
+  font-family: 'DM Serif Display', serif;
+  font-size: 18px;
+  line-height: 1.8;
+  color: var(--text);
+}
+.diary-corrected .word-tap { font-size: 18px; }
+
+/* ── SNAP (PHOTO) ── */
+.upload-area {
+  background: var(--surface2);
+  border: 2px dashed var(--border);
+  border-radius: 18px;
+  padding: 36px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 12px;
+}
+.upload-area.has-image { padding: 0; border-style: solid; border-color: var(--accent); overflow: hidden; }
+.upload-area img { width: 100%; border-radius: 16px; display: block; }
+.upload-icon { font-size: 40px; margin-bottom: 10px; }
+.upload-text { color: var(--text-muted); font-size: 14px; }
+
+.snap-word-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+.snap-word-row:last-child { border-bottom: none; }
+.snap-word-eng { font-size: 16px; font-weight: 700; color: var(--text); }
+.snap-word-kor { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+.snap-speak { color: var(--accent2); font-size: 18px; }
+
+/* ── WORDBOOK ── */
+.level-selector {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.level-btn {
+  flex: 1;
+  padding: 10px 6px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+}
+.level-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+.word-hero {
+  text-align: center;
+  padding: 24px 0 16px;
+}
+.word-main {
+  font-family: 'DM Serif Display', serif;
+  font-size: 52px;
+  color: var(--text);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.word-main:active { color: var(--accent); }
+.word-mean {
+  font-size: 20px;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+.speak-big { font-size: 22px; color: var(--accent2); margin-left: 8px; cursor: pointer; }
+
+.step-card {
+  background: var(--surface2);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+}
+.step-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.step1 .step-title { color: var(--green); }
+.step2 .step-title { color: var(--gold); }
+.step3 .step-title { color: var(--accent3); }
+.step-eng { font-size: 14px; font-weight: 600; color: var(--text); cursor: pointer; }
+.step-kor { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+.word-actions { display: flex; gap: 8px; margin-top: 12px; }
+.word-actions button { flex: 1; padding: 12px; border-radius: 12px; border: none; font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+.btn-know { background: var(--green); color: #000; }
+.btn-next { background: var(--accent); color: white; }
+
+.mastered-count {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 10px;
+}
+
+/* ── QUIZ ── */
+.quiz-big-q {
+  text-align: center;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.5;
+  padding: 24px 10px;
+  color: var(--text);
+}
+
+/* ── SIDEBAR ── */
+.sidebar-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 900;
+  backdrop-filter: blur(4px);
+}
+.sidebar-overlay.open { display: block; }
+
+.sidebar {
+  position: fixed;
+  left: -340px;
+  top: 0; bottom: 0;
+  width: 300px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  transition: left 0.3s cubic-bezier(0.4,0,0.2,1);
+  overflow: hidden;
+}
+.sidebar.open { left: 0; }
+
+.sidebar-header {
+  padding: 20px 18px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.sidebar-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+.sidebar-close {
+  width: 32px; height: 32px;
+  background: var(--surface2);
+  border: none;
+  border-radius: 8px;
+  color: var(--text-muted);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.sidebar-search {
+  padding: 12px 16px;
+  flex-shrink: 0;
+}
+.sidebar-search input {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+}
+.sidebar-search input::placeholder { color: var(--text-muted); }
+
+.sidebar-tabs {
+  display: flex;
+  padding: 0 16px;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-bottom: 12px;
+}
+.sidebar-tab {
+  flex: 1;
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  background: var(--surface2);
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.sidebar-tab.active { background: var(--accent); color: white; }
+
+.sidebar-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 16px 20px;
+}
+.save-item {
+  background: var(--surface2);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.save-item:active { background: #2a2a38; }
+.save-item-kor { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.save-item-eng { font-size: 12px; color: var(--text-muted); }
+.save-del { position: absolute; top: 10px; right: 10px; background: none; border: none; color: var(--accent3); font-size: 16px; cursor: pointer; padding: 4px; }
+
+.sidebar-stats {
+  padding: 14px 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.stat-box {
+  flex: 1;
+  background: var(--surface2);
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+}
+.stat-num { font-size: 20px; font-weight: 700; color: var(--accent); }
+.stat-label { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+
+/* ── MODAL ── */
+.modal-bg {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.8);
+  z-index: 2000;
+  align-items: flex-end;
+  justify-content: center;
+  backdrop-filter: blur(6px);
+}
+.modal-bg.open { display: flex; animation: fadeIn 0.2s; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.modal-sheet {
+  width: 100%;
+  max-width: 430px;
+  background: var(--surface);
+  border-radius: 24px 24px 0 0;
+  padding: 20px 20px 36px;
+  animation: slideUp 0.3s cubic-bezier(0.4,0,0.2,1);
+  max-height: 85dvh;
+  overflow-y: auto;
+}
+@keyframes slideUp { from { transform: translateY(60px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+.modal-handle { width: 40px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 18px; }
+.modal-word { font-family: 'DM Serif Display', serif; font-size: 32px; text-align: center; color: var(--text); margin-bottom: 4px; cursor: pointer; }
+.modal-mean { text-align: center; font-size: 16px; color: var(--text-muted); margin-bottom: 6px; }
+.modal-tip { font-size: 13px; color: #aaa; line-height: 1.6; margin-bottom: 16px; padding: 12px; background: var(--surface2); border-radius: 10px; }
+.modal-ex { padding: 11px 14px; background: var(--surface2); border-radius: 10px; margin-bottom: 8px; cursor: pointer; }
+.modal-ex-eng { font-size: 13px; font-weight: 600; color: var(--accent2); }
+.modal-ex-kor { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+.modal-actions { display: flex; gap: 8px; margin-top: 14px; }
+.modal-btn { flex: 1; padding: 13px; border-radius: 12px; border: none; font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+.modal-btn-save { background: var(--accent); color: white; }
+.modal-btn-dict { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+.modal-btn-close { background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); }
+
+/* ── LOADING ── */
+.loading-bar {
+  display: none;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent));
+  background-size: 200%;
+  border-radius: 2px;
+  margin-bottom: 16px;
+  animation: shimmer 1.5s infinite;
+}
+.loading-bar.active { display: block; }
+@keyframes shimmer { 0% { background-position: 0%; } 100% { background-position: 200%; } }
+
+.loading-text {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+  padding: 30px 0;
+  display: none;
+}
+.loading-text.active { display: block; }
+
+/* ── EMPTY STATES ── */
+.empty-state {
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--text-muted);
+}
+.empty-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.5; }
+.empty-text { font-size: 14px; line-height: 1.6; }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* ── SECTION HEADERS ── */
+.section-head {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin: 20px 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-head::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── EXPRESSION PILLS ── */
+.expr-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.expr-pill {
+  padding: 7px 12px;
+  background: var(--surface2);
+  border-radius: 20px;
+  font-size: 12px;
+  color: var(--text);
+  cursor: pointer;
+  border: 1px solid var(--border);
+  transition: all 0.15s;
+}
+.expr-pill:active { background: var(--accent); border-color: var(--accent); }
+
+/* ── DIARY INPUT HELPER ── */
+.input-hint {
+  font-size: 12px;
+  color: #b0b0c8;
+  margin-top: -4px;
+  margin-bottom: 12px;
+  padding: 6px 10px;
+  background: rgba(124,111,247,0.1);
+  border-radius: 8px;
+  border-left: 3px solid var(--accent);
+}
+
+/* ── PROGRESS BAR ── */
+.progress-wrap { background: var(--surface2); border-radius: 4px; height: 6px; overflow: hidden; margin: 8px 0 4px; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 4px; transition: width 0.5s; }
+
+/* ── HOME DASHBOARD ── */
+.home-greeting {
+  padding: 18px 0 6px;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.4;
+}
+.home-greeting span { color: var(--accent); }
+
+.streak-card {
+  background: linear-gradient(135deg, #1e1b3a, #2a1f4a);
+  border: 1px solid rgba(124,111,247,0.3);
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.streak-flame {
+  font-size: 48px;
+  line-height: 1;
+  filter: drop-shadow(0 0 12px rgba(255,160,0,0.6));
+  animation: flamePulse 2s ease-in-out infinite;
+}
+@keyframes flamePulse {
+  0%,100% { transform: scale(1); filter: drop-shadow(0 0 12px rgba(255,160,0,0.6)); }
+  50% { transform: scale(1.08); filter: drop-shadow(0 0 20px rgba(255,160,0,0.9)); }
+}
+.streak-info { flex: 1; }
+.streak-days {
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+  font-family: 'DM Serif Display', serif;
+}
+.streak-label { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+.streak-best { font-size: 11px; color: rgba(245,200,66,0.6); margin-top: 4px; }
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px 12px;
+  text-align: center;
+}
+.stat-card-num {
+  font-size: 28px;
+  font-weight: 700;
+  font-family: 'DM Serif Display', serif;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.stat-card-label { font-size: 11px; color: var(--text-muted); line-height: 1.3; }
+
+.today-goal-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 18px;
+  margin-bottom: 14px;
+}
+.today-goal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.today-goal-title { font-size: 14px; font-weight: 700; color: var(--text); }
+.today-goal-pct { font-size: 13px; font-weight: 700; color: var(--accent); }
+.goal-items { display: flex; flex-direction: column; gap: 8px; }
+.goal-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.goal-item.done { color: var(--green); }
+.goal-check {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+.goal-item.done .goal-check { background: var(--green); border-color: var(--green); color: #000; }
+
+.recent-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 18px;
+  margin-bottom: 14px;
+}
+.recent-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+.recent-item:last-child { border-bottom: none; }
+.recent-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.recent-text { flex: 1; overflow: hidden; }
+.recent-eng { font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.recent-kor { font-size: 11px; color: var(--text-muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.quick-btn-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.quick-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.quick-btn:active { transform: scale(0.97); background: var(--surface2); }
+.quick-btn-icon { font-size: 24px; }
+.quick-btn-text { font-size: 13px; font-weight: 600; color: var(--text); text-align: left; line-height: 1.3; }
+.quick-btn-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+/* ── STEP-BY-STEP TRANSLATE ── */
+.step-reveal {
+  margin-bottom: 14px;
+}
+.step-block {
+  display: none;
+  animation: fadeUp 0.35s ease;
+}
+.step-block.visible { display: block; }
+
+.reveal-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--surface);
+  border: 1px dashed rgba(124,111,247,0.4);
+  border-radius: 14px;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.reveal-btn:active { background: rgba(124,111,247,0.1); }
+.reveal-btn.hidden-btn { display: none; }
+
+.quiz-inline {
+  background: var(--surface2);
+  border-radius: 14px;
+  padding: 16px;
+  margin-top: 8px;
+}
+.quiz-inline-q {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+.quiz-inline-opts { display: flex; flex-direction: column; gap: 8px; }
+.quiz-inline-opt {
+  padding: 12px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+  display: flex; align-items: center; gap: 10px;
+  transition: all 0.15s;
+  font-family: inherit;
+  text-align: left;
+}
+.quiz-inline-opt.correct { border-color: var(--green); background: rgba(86,211,100,0.1); color: var(--green); }
+.quiz-inline-opt.wrong { border-color: var(--accent3); background: rgba(255,107,157,0.1); color: var(--accent3); }
+
+.say-it-box {
+  background: linear-gradient(135deg, rgba(124,111,247,0.1), rgba(78,205,196,0.1));
+  border: 1px solid rgba(124,111,247,0.3);
+  border-radius: 14px;
+  padding: 16px;
+  text-align: center;
+  margin-bottom: 14px;
+}
+.say-it-label { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+.say-it-sentence {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  color: var(--text);
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+.say-it-btns { display: flex; gap: 8px; justify-content: center; }
+
+/* ── 따라말하기 채점 ── */
+.score-bar-wrap {
+  display: flex; align-items: center; gap: 10px; margin-top: 10px;
+}
+.score-bar-bg {
+  flex: 1; height: 10px; background: var(--surface2);
+  border-radius: 5px; overflow: hidden;
+}
+.score-bar-fill {
+  height: 100%; border-radius: 5px;
+  transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+  background: linear-gradient(90deg, var(--accent3), var(--gold), var(--green));
+}
+.score-num {
+  font-size: 22px; font-weight: 700;
+  font-family: 'DM Serif Display', serif;
+  min-width: 44px; text-align: right;
+}
+.mic-btn {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg, var(--accent3), #d4507a);
+  border: none; border-radius: 14px;
+  color: white; font-size: 15px; font-weight: 700;
+  font-family: inherit; cursor: pointer;
+  transition: all 0.2s; margin-top: 8px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.mic-btn.recording {
+  background: linear-gradient(135deg, #e53935, #c62828);
+  animation: recPulse 1s infinite;
+}
+@keyframes recPulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(229,57,53,0.4); }
+  50% { box-shadow: 0 0 0 12px rgba(229,57,53,0); }
+}
+.transcript-box {
+  background: var(--surface2); border-radius: 12px; padding: 12px 14px;
+  font-size: 14px; color: var(--text-muted); line-height: 1.6;
+  margin-top: 10px; min-height: 44px;
+  border: 1px dashed var(--border);
+}
+.diff-match { color: var(--green); font-weight: 700; }
+.diff-miss  { color: var(--accent3); text-decoration: line-through; }
+.diff-extra { color: var(--gold); }
+
+/* ── 망각곡선 복습 ── */
+.review-empty { text-align:center; padding:48px 20px; color:var(--text-muted); }
+.review-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 20px;
+  margin-bottom: 14px;
+}
+.review-q {
+  font-size: 15px; font-weight: 600;
+  color: var(--text-muted); margin-bottom: 16px;
+  text-align: center;
+}
+.review-answer {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px; color: var(--text);
+  text-align: center; line-height: 1.5;
+  margin-bottom: 16px; cursor: pointer;
+}
+.review-btns { display: flex; gap: 8px; }
+.btn-review-ok {
+  flex:1; padding:12px;
+  background: rgba(86,211,100,0.15);
+  border: 1px solid var(--green); border-radius: 12px;
+  color: var(--green); font-size: 13px; font-weight: 700;
+  font-family: inherit; cursor: pointer;
+}
+.btn-review-again {
+  flex:1; padding:12px;
+  background: rgba(255,107,157,0.15);
+  border: 1px solid var(--accent3); border-radius: 12px;
+  color: var(--accent3); font-size: 13px; font-weight: 700;
+  font-family: inherit; cursor: pointer;
+}
+.review-badge {
+  display: inline-block; padding: 2px 8px;
+  border-radius: 6px; font-size: 10px; font-weight: 700;
+  background: rgba(245,200,66,0.15); color: var(--gold);
+  margin-bottom: 8px;
+}
+
+/* ── 통계 ── */
+.stats-section-title {
+  font-size: 13px; font-weight: 700;
+  color: var(--text-muted); text-transform: uppercase;
+  letter-spacing: 0.8px; margin: 18px 0 10px;
+}
+.heatmap-wrap {
+  display: flex; flex-wrap: wrap; gap: 3px;
+  margin-bottom: 6px;
+}
+.heatmap-cell {
+  width: 14px; height: 14px; border-radius: 3px;
+  background: var(--surface2);
+}
+.heatmap-cell.lv1 { background: rgba(124,111,247,0.25); }
+.heatmap-cell.lv2 { background: rgba(124,111,247,0.5); }
+.heatmap-cell.lv3 { background: rgba(124,111,247,0.75); }
+.heatmap-cell.lv4 { background: var(--accent); }
+.bar-chart-row {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 10px;
+}
+.bar-label { font-size: 12px; color: var(--text-muted); width: 70px; flex-shrink: 0; }
+.bar-bg { flex:1; height: 20px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s; }
+.bar-val { font-size: 12px; font-weight: 700; color: var(--text); width: 28px; text-align: right; }
+
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR OVERLAY -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-title">📚 학습 보관함</div>
+    <button class="sidebar-close" onclick="closeSidebar()">✕</button>
+  </div>
+  <div class="sidebar-search">
+    <input type="text" id="storageSearch" placeholder="저장된 내용 검색..." oninput="renderSaveList()">
+  </div>
+  <div class="sidebar-tabs">
+    <button class="sidebar-tab active" id="tabSentBtn" onclick="switchSaveTab('sentence')">문장</button>
+    <button class="sidebar-tab" id="tabWordBtn" onclick="switchSaveTab('word')">단어</button>
+  </div>
+  <div class="sidebar-list" id="saveListEl"></div>
+  <div class="sidebar-stats">
+    <div class="stat-box">
+      <div class="stat-num" id="statSentences">0</div>
+      <div class="stat-label">저장된 문장</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" id="statWords">0</div>
+      <div class="stat-label">저장된 단어</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" id="statMastered">0</div>
+      <div class="stat-label">마스터 단어</div>
+    </div>
+  </div>
+</div>
+
+<!-- WORD MODAL -->
+<div class="modal-bg" id="wordModal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-word" id="mWord" onclick="speakText(document.getElementById('mWord').innerText, 0.9)"></div>
+    <div class="modal-mean" id="mMean"></div>
+    <div class="modal-tip" id="mTip"></div>
+    <div id="mExamples"></div>
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-save" id="mBtnSave">⭐ 저장</button>
+      <button class="modal-btn modal-btn-dict" onclick="openDict()">🌐 사전</button>
+      <button class="modal-btn modal-btn-close" onclick="closeModal()">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app">
+
+  <!-- HEADER -->
+  <div class="app-header">
+    <button class="header-btn" onclick="openSidebar()">☰</button>
+    <div class="app-logo">SNOW Tutor</div>
+    <button class="header-btn" onclick="openSidebar()" style="font-size:12px; font-weight:700; color:var(--accent);">
+      <span id="headerSaveCount">0</span>개
+    </button>
+  </div>
+
+
+  <!-- CONTENT -->
+  <div class="content" id="mainContent">
+
+    <!-- ─── TAB: HOME ─── -->
+    <div class="tab-panel active" id="tab-home">
+      <div class="home-greeting" id="homeGreeting">안녕하세요! 👋<br><span>오늘도 함께 배워요</span></div>
+
+      <!-- 스트릭 카드 -->
+      <div class="streak-card">
+        <div class="streak-flame" id="streakFlame">🔥</div>
+        <div class="streak-info">
+          <div class="streak-days" id="streakDays">0</div>
+          <div class="streak-label">일 연속 학습 중</div>
+          <div class="streak-best" id="streakBest">최고 기록: 0일</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:11px; color:var(--text-muted); margin-bottom:4px;">오늘</div>
+          <div id="todayDoneIcon" style="font-size:28px;">⭕</div>
+        </div>
+      </div>
+
+      <!-- 통계 3칸 -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-card-num" id="homeTotalSent" style="color:var(--accent);">0</div>
+          <div class="stat-card-label">저장한<br>문장</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-num" id="homeTotalWord" style="color:var(--accent2);">0</div>
+          <div class="stat-card-label">저장한<br>단어</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-num" id="homeMastered" style="color:var(--gold);">0</div>
+          <div class="stat-card-label">마스터<br>단어</div>
+        </div>
+      </div>
+
+      <!-- 오늘의 목표 -->
+      <div class="today-goal-card">
+        <div class="today-goal-header">
+          <div class="today-goal-title">📋 오늘의 학습 목표</div>
+          <div class="today-goal-pct" id="goalPct">0%</div>
+        </div>
+        <div class="progress-wrap"><div class="progress-fill" id="goalBar" style="width:0%"></div></div>
+        <div class="goal-items" style="margin-top:12px;">
+          <div class="goal-item" id="goal-translate">
+            <div class="goal-check">1</div>
+            <span>문장 분석 1개 하기</span>
+          </div>
+          <div class="goal-item" id="goal-word">
+            <div class="goal-check">2</div>
+            <span>단어장에서 단어 1개 배우기</span>
+          </div>
+          <div class="goal-item" id="goal-quiz">
+            <div class="goal-check">3</div>
+            <span>퀴즈 1문제 풀기</span>
+          </div>
+          <div class="goal-item" id="goal-any">
+            <div class="goal-check">4</div>
+            <span>영화대사 또는 가사 1개 보기</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 빠른 시작 -->
+      <div class="section-label" style="margin-bottom:10px;">빠른 시작</div>
+      <div class="quick-btn-grid">
+        <button class="quick-btn" onclick="showTab('translate')">
+          <span class="quick-btn-icon">✨</span>
+          <div class="quick-btn-text">문장 분석
+            <div class="quick-btn-sub">한글→영어 번역 & 문법</div>
+          </div>
+        </button>
+        <button class="quick-btn" onclick="showTab('words')">
+          <span class="quick-btn-icon">📖</span>
+          <div class="quick-btn-text">오늘의 단어
+            <div class="quick-btn-sub">왕초보 단어 배우기</div>
+          </div>
+        </button>
+        <button class="quick-btn" onclick="showTab('movie')">
+          <span class="quick-btn-icon">🎬</span>
+          <div class="quick-btn-text">영화 명대사
+            <div class="quick-btn-sub">좋아하는 장르로</div>
+          </div>
+        </button>
+        <button class="quick-btn" onclick="showTab('lyrics')">
+          <span class="quick-btn-icon">🎵</span>
+          <div class="quick-btn-text">가사 한 줄
+            <div class="quick-btn-sub">LP 아티스트로</div>
+          </div>
+        </button>
+      </div>
+
+      <!-- 최근 저장 문장 -->
+      <div class="section-label" style="margin-bottom:10px;">최근 저장 문장</div>
+      <div class="recent-card">
+        <div id="homeRecentList">
+          <div style="text-align:center; padding:20px 0; color:var(--text-muted); font-size:13px;">아직 저장한 문장이 없어요.<br>분석탭에서 문장을 배우고 저장해보세요!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── TAB: TRANSLATE ─── -->
+    <div class="tab-panel" id="tab-translate">
+      <input type="text" class="input-field" id="transInput" placeholder="한글 문장을 입력하세요 (예: 나는 밥을 먹었어)">
+      <button class="btn-primary" onclick="runTranslate()">✨ AI 선생님께 분석 요청</button>
+
+      <div class="loading-bar" id="transLoadBar"></div>
+      <div class="loading-text" id="transLoadText">✨ 스노우님을 위한 분석 중...</div>
+
+      <div id="transResult" style="display:none;">
+
+        <!-- STEP 1: 번역 + 따라말하기 -->
+        <div class="step-block visible" id="stepBlock1">
+          <div class="card">
+            <div class="section-label">① 번역 결과 — 먼저 읽어보세요</div>
+            <div class="eng-sentence" id="engSentence"></div>
+            <div class="speed-row" style="margin-top:14px;">
+              <button class="btn-ghost" onclick="speakCurrentSpeed(0.5)">x0.5</button>
+              <button class="btn-ghost" onclick="speakCurrentSpeed(0.8)">x0.8</button>
+              <button class="btn-ghost" onclick="speakCurrentSpeed(1.0)">x1.0</button>
+              <button class="btn-ghost" onclick="speakCurrentSpeed(1.2)">x1.2</button>
+            </div>
+            <div class="chunk-box" id="chunkBox"></div>
+          </div>
+          <!-- 따라 말하기 유도 -->
+          <div class="say-it-box">
+            <div class="say-it-label">🗣️ 소리 내서 따라 읽어보세요 (혼자니까 괜찮아요!)</div>
+            <div class="say-it-sentence" id="sayItSentence"></div>
+            <div class="say-it-btns">
+              <button class="btn-ghost" onclick="speakCurrentSpeed(0.6)" style="flex:1;">🔊 천천히 듣기</button>
+              <button class="btn-ghost" onclick="speakCurrentSpeed(1.0)" style="flex:1;">🔊 보통 속도</button>
+            </div>
+            <button class="mic-btn" id="micBtn" onclick="toggleSpeechRecog()">
+              🎤 따라 말하고 채점받기
+            </button>
+            <div class="transcript-box" id="transcriptBox" style="display:none;"></div>
+            <div id="scoreArea" style="display:none; margin-top:10px;">
+              <div class="score-bar-wrap">
+                <div class="score-bar-bg"><div class="score-bar-fill" id="scoreBarFill" style="width:0%"></div></div>
+                <div class="score-num" id="scoreNum">0%</div>
+              </div>
+              <div id="scoreComment" style="font-size:12px; color:var(--text-muted); margin-top:6px; text-align:center;"></div>
+            </div>
+          </div>
+          <button class="reveal-btn" id="revealBtn2" onclick="revealStep(2)">
+            ✅ 읽었어요! 단어 뜻 보기 →
+          </button>
+        </div>
+
+        <!-- STEP 2: 단어별 뜻 (dictionary) -->
+        <div class="step-block" id="stepBlock2">
+          <div class="card card-accent-green">
+            <div class="section-label">② 단어 하나씩 살펴보기</div>
+            <div id="dictArea"></div>
+          </div>
+          <button class="reveal-btn" id="revealBtn3" onclick="revealStep(3)">
+            📍 문법 설명 보기 →
+          </button>
+        </div>
+
+        <!-- STEP 3: 문법 가이드 -->
+        <div class="step-block" id="stepBlock3">
+          <div class="section-head">③ 문법 포인트 — 이게 핵심이에요</div>
+          <div id="guidesArea"></div>
+          <button class="reveal-btn" id="revealBtn4" onclick="revealStep(4)">
+            📝 예문으로 연습하기 →
+          </button>
+        </div>
+
+        <!-- STEP 4: 예문 -->
+        <div class="step-block" id="stepBlock4">
+          <div class="card" id="samplesCard">
+            <div class="section-label">④ 비슷한 예문 — 소리 내서 읽어보세요</div>
+            <div id="samplesArea"></div>
+          </div>
+          <button class="reveal-btn" id="revealBtn5" onclick="revealStep(5)">
+            ⚡ 퀴즈로 확인하기 →
+          </button>
+        </div>
+
+        <!-- STEP 5: 퀴즈 -->
+        <div class="step-block" id="stepBlock5">
+          <div class="card" id="quizCard">
+            <div class="section-label">⑤ 방금 배운 것 퀴즈로 확인!</div>
+            <div id="quizArea"></div>
+          </div>
+          <button class="btn-save" onclick="saveSentence()" style="margin-top:8px;">⭐ 이 문장 보관함에 저장</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ─── TAB: DIARY ─── -->
+    <div class="tab-panel" id="tab-diary">
+      <p class="input-hint">💡 한글 또는 영어로 자유롭게 적어보세요</p>
+      <textarea class="input-field" id="diaryInput" placeholder="오늘 하루를 짧게 일기처럼 적어보세요...&#10;예) 오늘 날씨가 너무 좋아서 친구랑 공원에 갔어."></textarea>
+      <button class="btn-green" onclick="runDiary()">✍️ AI 선생님께 일기 검사받기</button>
+
+      <div class="loading-bar" id="diaryLoadBar"></div>
+      <div class="loading-text" id="diaryLoadText">📝 일기를 분석하고 있어요...</div>
+
+      <div id="diaryResult" style="display:none;"></div>
+    </div>
+
+    <!-- ─── TAB: SNAP ─── -->
+    <div class="tab-panel" id="tab-snap">
+      <div class="upload-area" id="uploadArea" onclick="document.getElementById('snapFile').click()">
+        <div class="upload-icon">📷</div>
+        <div class="upload-text">사진을 탭해서 업로드<br><small style="opacity:0.6;">찍은 사진 속 사물을 영어로 배워요</small></div>
+      </div>
+      <input type="file" id="snapFile" accept="image/*" style="display:none" onchange="onSnapFile(event)">
+      <button class="btn-primary" id="snapBtn" onclick="runSnap()" style="display:none;">📸 사진 속 영어 분석하기</button>
+
+      <div class="loading-bar" id="snapLoadBar"></div>
+      <div class="loading-text" id="snapLoadText">🔍 사진 속 단어를 찾고 있어요...</div>
+
+      <div id="snapResult" style="display:none;"></div>
+    </div>
+
+    <!-- ─── TAB: WORDS ─── -->
+    <div class="tab-panel" id="tab-words">
+      <div class="level-selector">
+        <button class="level-btn active" id="lvlBeg" onclick="setLevel('beginner')">🌱 왕초보</button>
+        <button class="level-btn" id="lvlMid" onclick="setLevel('intermediate')">📗 중급</button>
+        <button class="level-btn" id="lvlAdv" onclick="setLevel('advanced')">🚀 고급</button>
+      </div>
+
+      <div class="loading-bar" id="wordLoadBar"></div>
+      <div class="loading-text" id="wordLoadText">📖 새 단어를 가져오는 중...</div>
+
+      <div id="wordDisplay">
+        <div class="empty-state">
+          <div class="empty-icon">📖</div>
+          <div class="empty-text">버튼을 눌러 오늘의 단어를 시작해보세요!</div>
+        </div>
+      </div>
+
+      <div class="word-actions" id="wordActions" style="display:none;">
+        <button class="btn-ghost btn-know" style="flex:1; padding:14px; font-size:14px;" onclick="markKnown()">✅ 알아요</button>
+        <button class="btn-primary" style="flex:2; margin-bottom:0;" onclick="getNextWord()">다음 단어 →</button>
+      </div>
+      <div class="mastered-count" id="masteredCount"></div>
+    </div>
+
+    <!-- ─── TAB: QUIZ ─── -->
+    <div class="tab-panel" id="tab-quiz">
+      <div class="level-selector" style="margin-bottom:14px;">
+        <button class="level-btn active" id="qDiffEasy" onclick="setQuizDiff('easy')">🌱 쉬움</button>
+        <button class="level-btn" id="qDiffMid" onclick="setQuizDiff('medium')">📗 보통</button>
+        <button class="level-btn" id="qDiffHard" onclick="setQuizDiff('hard')">🔥 어려움</button>
+      </div>
+      <div class="loading-bar" id="quizLoadBar"></div>
+      <div class="loading-text" id="quizLoadText">⚡ 문제를 생성하고 있어요...</div>
+
+      <div id="quizPanel">
+        <div class="empty-state">
+          <div class="empty-icon">⚡</div>
+          <div class="empty-text">난이도를 선택하고 새 문제를 눌러보세요!</div>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="runQuiz()" style="margin-top:12px;">⚡ 새 문제 생성</button>
+    </div>
+
+    <!-- ─── TAB: MOVIE ─── -->
+    <div class="tab-panel" id="tab-movie">
+      <div class="card" style="margin-bottom:14px;">
+        <div class="section-label">🎬 영화 장르 선택</div>
+        <div class="level-selector" style="flex-wrap:wrap; gap:6px;">
+          <button class="level-btn active" id="mg-thriller" onclick="setMovieGenre('thriller','스릴러')">😱 스릴러</button>
+          <button class="level-btn" id="mg-action" onclick="setMovieGenre('action','액션')">💥 액션</button>
+          <button class="level-btn" id="mg-drama" onclick="setMovieGenre('drama','드라마')">🎭 드라마</button>
+          <button class="level-btn" id="mg-comedy" onclick="setMovieGenre('comedy','코미디')">😄 코미디</button>
+          <button class="level-btn" id="mg-scifi" onclick="setMovieGenre('sci-fi','SF')">🚀 SF</button>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="runMovieQuote()">🎬 오늘의 명대사 가져오기</button>
+      <div class="loading-bar" id="movieLoadBar"></div>
+      <div class="loading-text" id="movieLoadText">🎬 명대사를 찾고 있어요...</div>
+      <div id="movieResult">
+        <div class="empty-state">
+          <div class="empty-icon">🎬</div>
+          <div class="empty-text">장르를 선택하고 명대사를 불러오세요!<br><small style="opacity:0.6;">실제 영화 대사로 자연스러운 영어를 배워요</small></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── TAB: LYRICS ─── -->
+    <div class="tab-panel" id="tab-lyrics">
+      <div class="card" style="margin-bottom:14px;">
+        <div class="section-label">🎵 가수 또는 곡명 입력</div>
+        <input type="text" class="input-field" id="lyricsArtist" placeholder="예: The Beatles, Adele, BTS...">
+        <div style="font-size:12px; color:var(--text-muted); margin-top:-6px; margin-bottom:12px; padding: 6px 10px; background:rgba(78,205,196,0.1); border-radius:8px; border-left:3px solid var(--accent2);">
+          💡 LP 컬렉션 아티스트를 입력하면 더욱 친숙하게 배울 수 있어요
+        </div>
+        <button class="btn-primary" style="background: linear-gradient(135deg, var(--accent2), #2dba72);" onclick="runLyrics()">🎵 오늘의 가사 한 줄 배우기</button>
+      </div>
+      <div class="loading-bar" id="lyricsLoadBar"></div>
+      <div class="loading-text" id="lyricsLoadText">🎵 가사를 분석하고 있어요...</div>
+      <div id="lyricsResult">
+        <div class="empty-state">
+          <div class="empty-icon">🎵</div>
+          <div class="empty-text">좋아하는 아티스트의 가사로<br>영어를 배워보세요!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── TAB: REVIEW (망각곡선 복습) ─── -->
+    <div class="tab-panel" id="tab-review">
+      <div style="padding-top:8px;">
+        <div class="section-label">🔁 망각곡선 복습</div>
+        <p style="font-size:13px; color:var(--text-muted); margin-bottom:14px; line-height:1.6;">
+          저장한 문장 중 복습할 시간이 된 것들이에요.<br>
+          기억나면 ✅, 모르면 🔄를 눌러주세요.
+        </p>
+        <div id="reviewPanel">
+          <div class="review-empty">
+            <div style="font-size:48px; margin-bottom:12px; opacity:0.5;">🔁</div>
+            <div style="font-size:14px;">아직 복습할 문장이 없어요.<br>문장을 저장하고 시간이 지나면 여기 나타나요!</div>
+          </div>
+        </div>
+        <div id="reviewDoneMsg" style="display:none; text-align:center; padding:32px 0;">
+          <div style="font-size:48px; margin-bottom:12px;">🎉</div>
+          <div style="font-size:16px; font-weight:700; color:var(--green); margin-bottom:6px;">오늘 복습 완료!</div>
+          <div style="font-size:13px; color:var(--text-muted);">다음 복습 문장이 생기면 알려드릴게요.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── TAB: STATS (학습 통계) ─── -->
+    <div class="tab-panel" id="tab-stats">
+      <div style="padding-top:8px;">
+
+        <!-- 핵심 수치 -->
+        <div class="stats-grid" style="margin-bottom:14px;">
+          <div class="stat-card">
+            <div class="stat-card-num" id="statTotalDays" style="color:var(--gold);">0</div>
+            <div class="stat-card-label">총 학습일</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-num" id="statTotalSent2" style="color:var(--accent);">0</div>
+            <div class="stat-card-label">저장 문장</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-num" id="statTotalWord2" style="color:var(--accent2);">0</div>
+            <div class="stat-card-label">저장 단어</div>
+          </div>
+        </div>
+
+        <!-- 스트릭 정보 -->
+        <div class="card card-accent-gold" style="margin-bottom:14px;">
+          <div class="section-label">🔥 스트릭 현황</div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="font-size:32px; font-weight:700; color:var(--gold); font-family:'DM Serif Display',serif;" id="statStreak">0</div>
+              <div style="font-size:12px; color:var(--text-muted);">현재 연속 학습일</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:22px; font-weight:700; color:var(--accent);" id="statBest">0</div>
+              <div style="font-size:12px; color:var(--text-muted);">최고 기록</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 탭별 활동 -->
+        <div class="card" style="margin-bottom:14px;">
+          <div class="section-label">📋 탭별 사용 횟수</div>
+          <div id="tabUsageChart"></div>
+        </div>
+
+        <!-- 최근 30일 학습 히트맵 -->
+        <div class="card" style="margin-bottom:14px;">
+          <div class="section-label">📅 최근 30일 학습 기록</div>
+          <div class="heatmap-wrap" id="heatmapArea"></div>
+          <div style="display:flex; gap:6px; align-items:center; margin-top:8px; font-size:11px; color:var(--text-muted);">
+            <span>적음</span>
+            <div style="width:12px;height:12px;border-radius:2px;background:var(--surface2);"></div>
+            <div style="width:12px;height:12px;border-radius:2px;" class="heatmap-cell lv1"></div>
+            <div style="width:12px;height:12px;border-radius:2px;" class="heatmap-cell lv2"></div>
+            <div style="width:12px;height:12px;border-radius:2px;" class="heatmap-cell lv3"></div>
+            <div style="width:12px;height:12px;border-radius:2px;" class="heatmap-cell lv4"></div>
+            <span>많음</span>
+          </div>
+        </div>
+
+        <!-- 마스터 단어 목록 -->
+        <div class="card" style="margin-bottom:14px;">
+          <div class="section-label">⭐ 마스터한 단어 (<span id="statMasteredCount">0</span>개)</div>
+          <div id="masteredWordList" style="display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;"></div>
+        </div>
+
+      </div>
+    </div>
+
+    </div><!-- /content -->
+
+  <!-- BOTTOM NAV -->
+  <div class="nav-bar">
+    <button class="nav-item active" id="nav-home" onclick="showTab('home')">
+      <span class="nav-icon">🏠</span>홈
+    </button>
+    <button class="nav-item" id="nav-translate" onclick="showTab('translate')">
+      <span class="nav-icon">✨</span>분석
+    </button>
+    <button class="nav-item" id="nav-diary" onclick="showTab('diary')">
+      <span class="nav-icon">✍️</span>일기
+    </button>
+    <button class="nav-item" id="nav-snap" onclick="showTab('snap')">
+      <span class="nav-icon">📸</span>찰칵
+    </button>
+    <button class="nav-item" id="nav-words" onclick="showTab('words')">
+      <span class="nav-icon">📖</span>단어장
+    </button>
+    <button class="nav-item" id="nav-quiz" onclick="showTab('quiz')">
+      <span class="nav-icon">⚡</span>퀴즈
+    </button>
+    <button class="nav-item" id="nav-movie" onclick="showTab('movie')">
+      <span class="nav-icon">🎬</span>영화대사
+    </button>
+    <button class="nav-item" id="nav-lyrics" onclick="showTab('lyrics')">
+      <span class="nav-icon">🎵</span>가사한줄
+    </button>
+    <button class="nav-item" id="nav-review" onclick="showTab('review')">
+      <span class="nav-icon">🔁</span>복습
+    </button>
+    <button class="nav-item" id="nav-stats" onclick="showTab('stats')">
+      <span class="nav-icon">📊</span>통계
+    </button>
+  </div>
+
+</div><!-- /app -->
+
+<script>
+// ══════════════════════════════════════
+//  CONFIG  (API 키를 여기에 입력하세요)
+// ══════════════════════════════════════
+const API_KEY = "AIzaSyCoaWLFf7-uhlC2WhWR1xDLi1DaoKVWWTE";
+const MODEL  = "gemini-3-flash-preview"; // ✅ 올바른 모델명 유지
+
+// ══════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════
+let currentEngSentence = "";
+let currentKorInput    = "";
+let currentWordData    = null;
+let currentLevel       = "beginner";
+let currentSaveTab     = "sentence";
+let seenWords          = JSON.parse(localStorage.getItem('seenWords') || '[]');
+let masteredWords      = JSON.parse(localStorage.getItem('masteredWords') || '[]');
+let snowStorage        = JSON.parse(localStorage.getItem('snowStorage') || '{"sentence":[],"word":[]}');
+let currentWordModal   = null;
+let snapBase64         = null;
+let snapMimeType       = "";
+let quizDifficulty     = "easy";
+let currentMovieGenre  = "thriller";
+let currentMovieGenreKor = "스릴러";
+
+// ── 스트릭 & 목표 ──
+let streakData = JSON.parse(localStorage.getItem('streakData') || '{"days":0,"best":0,"lastDate":"","todayDone":false}');
+let todayGoals = JSON.parse(localStorage.getItem('todayGoals') || '{"translate":false,"word":false,"quiz":false,"any":false}');
+const todayStr = new Date().toLocaleDateString('ko-KR');
+
+// ── 복습 & 통계 ──
+let reviewQueue = [];
+let reviewIdx = 0;
+let reviewFlipped = false;
+let tabUsage = JSON.parse(localStorage.getItem('tabUsage') || '{}');
+let learningLog = JSON.parse(localStorage.getItem('learningLog') || '{}');
+
+// ══════════════════════════════════════
+//  GEMINI API
+// ══════════════════════════════════════
+async function callGemini(prompt, imageData = null) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${API_KEY}`;
+  const parts = [];
+  if (imageData) {
+    parts.push({ inlineData: { mimeType: imageData.mime, data: imageData.b64 } });
+  }
+  parts.push({ text: prompt });
+  const body = { contents: [{ parts }] };
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  const data = await res.json();
+  if (!data.candidates || !data.candidates[0]) throw new Error("No response");
+  let text = data.candidates[0].content.parts[0].text;
+  text = text.replace(/```json|```/g, '').trim();
+  const match = text.match(/\{[\s\S]*\}/);
+  if (!match) throw new Error("No JSON found");
+  return JSON.parse(match[0]);
+}
+
+// ══════════════════════════════════════
+//  SPEECH
+// ══════════════════════════════════════
+function speakText(t, rate = 0.9) {
+  if (!t) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(t.replace(/\(.*?\)/g,'').trim());
+  u.lang = 'en-US'; u.rate = rate;
+  window.speechSynthesis.speak(u);
+}
+function speakCurrentSpeed(rate) {
+  if (currentEngSentence) speakText(currentEngSentence, rate);
+}
+
+// ══════════════════════════════════════
+//  TAB NAVIGATION
+// ══════════════════════════════════════
+function showTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  document.getElementById('nav-' + id).classList.add('active');
+  document.getElementById('mainContent').scrollTop = 0;
+  logTabUsage(id);
+  if (id === 'stats') renderStats();
+  if (id === 'review') renderReview();
+  if (id === 'home') renderHome();
+}
+
+// ══════════════════════════════════════
+//  TRANSLATE
+// ══════════════════════════════════════
+async function runTranslate() {
+  const input = document.getElementById('transInput').value.trim();
+  if (!input) { alert("문장을 입력하세요!"); return; }
+  currentKorInput = input;
+
+  setLoading('trans', true);
+  document.getElementById('transResult').style.display = 'none';
+
+  const prompt = `
+영한 AI 튜터. 한글 입력: "${input}"
+아래 JSON을 정확히 반환해. 절대 JSON 외 다른 텍스트 없이.
+{
+  "eng": "영어 번역 문장",
+  "chunks": "단어/뜻/단어/뜻 형식으로 직독직해 (슬래시로 구분)",
+  "dictionary": [{"word":"단어","mean":"뜻","tip":"초보자를 위한 상세 설명 (문법용어 한글+영어 병기)","exs":["예문 (해석)"]}],
+  "guides": [{"title":"문법 포인트 (영어명)","desc":"초보자도 이해하는 쉬운 설명, 예시 포함"}],
+  "samples_basic": ["기본 예문1 (해석)", "기본 예문2 (해석)", "기본 예문3 (해석)"],
+  "samples_up": ["심화 예문1 (해석)", "심화 예문2 (해석)"],
+  "quiz": {"q":"객관식 문제 (한글)", "opts": ["보기1","보기2","보기3","보기4"], "ans": 정답_인덱스_숫자}
+}
+dictionary에는 번역된 영어 문장의 '모든' 단어를 포함할 것.
+guides는 초보자에게 꼭 필요한 문법 설명 2~3개.
+quiz는 방금 배운 문법/단어를 활용한 문제.
+`;
+
+  try {
+    const res = await callGemini(prompt);
+    renderTranslate(res);
+  } catch(e) {
+    alert("오류가 발생했어요. 다시 시도해주세요.\n(" + e.message + ")");
+  } finally {
+    setLoading('trans', false);
+  }
+}
+
+function revealStep(stepNum) {
+  document.getElementById('stepBlock' + stepNum).classList.add('visible');
+  // 이전 버튼 숨기기
+  const prevBtn = document.getElementById('revealBtn' + stepNum);
+  if (prevBtn) prevBtn.classList.add('hidden-btn');
+  // 해당 블록으로 스크롤
+  setTimeout(() => {
+    document.getElementById('stepBlock' + stepNum).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+function renderTranslate(res) {
+  currentEngSentence = res.eng;
+
+  // 모든 step 블록 초기화
+  for (let i = 2; i <= 5; i++) {
+    const b = document.getElementById('stepBlock' + i);
+    if (b) b.classList.remove('visible');
+    const btn = document.getElementById('revealBtn' + (i));
+    if (btn) btn.classList.remove('hidden-btn');
+  }
+  document.getElementById('stepBlock1').classList.add('visible');
+
+  // ① 번역 + 직독직해
+  const wordHTML = res.eng.split(' ').map(w => {
+    const clean = w.toLowerCase().replace(/[.,!?;:']/g, '');
+    const found = res.dictionary && res.dictionary.find(d => d.word.toLowerCase() === clean);
+    const dData = found || { word: clean, mean: '탭하면 사전 확인', tip: '구글 사전에서 확인해보세요.', exs: [] };
+    return `<span class="word-tap" onclick='openWordModal(${JSON.stringify(dData)})'>${w}</span>`;
+  }).join(' ');
+  document.getElementById('engSentence').innerHTML = wordHTML;
+  document.getElementById('sayItSentence').textContent = res.eng;
+
+  // 직독직해
+  const parts = (res.chunks || '').split('/');
+  let chunkHTML = '<span style="color:var(--text-muted); font-size:12px; font-weight:600; letter-spacing:0.5px;">직독직해 코칭</span><br>';
+  for (let i = 0; i < parts.length; i += 2) {
+    const eng = parts[i] || '';
+    const kor = parts[i+1] || '';
+    chunkHTML += `<span style="color:var(--accent2); font-weight:600;">${eng.trim()}</span>`;
+    if (kor) chunkHTML += ` <span style="color:var(--text-muted);">(${kor.trim()})</span>`;
+    if (i + 2 < parts.length) chunkHTML += `<span class="chunk-sep">·</span>`;
+  }
+  document.getElementById('chunkBox').innerHTML = chunkHTML;
+
+  // ② 단어 사전 카드
+  let dictHTML = '';
+  (res.dictionary || []).forEach((d, idx) => {
+    const colors = ['var(--accent)', 'var(--accent2)', 'var(--gold)', 'var(--accent3)', 'var(--green)'];
+    const c = colors[idx % colors.length];
+    dictHTML += `<div style="padding:12px 0; border-bottom:1px solid var(--border);">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+        <span style="font-size:16px; font-weight:700; color:${c}; cursor:pointer;" onclick="speakText('${d.word.replace(/'/g,"\\'")}', 0.9)">${d.word} 🔊</span>
+        ${d.tip ? '' : ''}
+      </div>
+      <div style="font-size:14px; color:var(--text); margin-bottom:4px; font-weight:600;">${d.mean}</div>
+      ${d.tip ? `<div style="font-size:12px; color:var(--text-muted); line-height:1.6; background:var(--surface); padding:8px 10px; border-radius:8px; margin-top:4px;">💡 ${d.tip}</div>` : ''}
+    </div>`;
+  });
+  document.getElementById('dictArea').innerHTML = dictHTML || '<div style="color:var(--text-muted); font-size:13px;">단어 정보를 불러오지 못했어요.</div>';
+
+  // ③ 문법 가이드
+  let guidesHTML = '';
+  (res.guides || []).forEach((g, idx) => {
+    const colors = ['var(--accent)', 'var(--accent2)', 'var(--gold)'];
+    const c = colors[idx % 3];
+    guidesHTML += `<div class="guide-card" style="border-left-color:${c}; margin-bottom:10px;">
+      <div class="guide-title" style="color:${c};">📍 ${g.title}</div>
+      <div class="guide-desc">${g.desc}</div>
+    </div>`;
+  });
+  document.getElementById('guidesArea').innerHTML = guidesHTML;
+
+  // ④ 예문
+  let sHTML = `<div style="margin-bottom:12px;"><span class="badge badge-basic">🌱 Basic</span><span style="font-size:12px; color:var(--text-muted); margin-left:6px;">기본 예문</span></div>`;
+  (res.samples_basic || []).forEach(s => {
+    const eng = s.split('(')[0].trim();
+    const kor = s.includes('(') ? s.slice(s.indexOf('(')+1, s.lastIndexOf(')')) : '';
+    sHTML += `<div class="example-row" onclick="speakText('${eng.replace(/'/g,"\\'")}', 0.8)">
+      <div class="example-eng"><span class="speak-icon">🔊</span>${eng}</div>
+      ${kor ? `<div class="example-kor">${kor}</div>` : ''}
+    </div>`;
+  });
+  sHTML += `<div style="margin:14px 0 12px;"><span class="badge badge-up">🚀 Step Up</span><span style="font-size:12px; color:var(--text-muted); margin-left:6px;">심화 예문</span></div>`;
+  (res.samples_up || []).forEach(s => {
+    const eng = s.split('(')[0].trim();
+    const kor = s.includes('(') ? s.slice(s.indexOf('(')+1, s.lastIndexOf(')')) : '';
+    sHTML += `<div class="example-row" onclick="speakText('${eng.replace(/'/g,"\\'")}', 0.8)">
+      <div class="example-eng"><span class="speak-icon">🔊</span>${eng}</div>
+      ${kor ? `<div class="example-kor">${kor}</div>` : ''}
+    </div>`;
+  });
+  document.getElementById('samplesArea').innerHTML = sHTML;
+
+  // ⑤ 퀴즈
+  if (res.quiz) {
+    let qHTML = `<div class="quiz-big-q">${res.quiz.q}</div>`;
+    (res.quiz.opts || []).forEach((opt, i) => {
+      qHTML += `<div class="quiz-option" id="qopt-${i}" onclick="checkQuizAns(${i}, ${res.quiz.ans})">
+        <div class="quiz-option-num">${i+1}</div>${opt}
+      </div>`;
+    });
+    document.getElementById('quizArea').innerHTML = qHTML;
+  }
+
+  document.getElementById('transResult').style.display = 'block';
+  document.getElementById('mainContent').scrollTop = 0;
+  speakText(res.eng, 0.9);
+
+  // 목표 달성 처리
+  markGoalDone('translate');
+}
+
+function checkQuizAns(chosen, correct) {
+  document.querySelectorAll('.quiz-option').forEach((el, i) => {
+    el.onclick = null;
+    if (i === correct) el.classList.add('correct');
+    else if (i === chosen && chosen !== correct) el.classList.add('wrong');
+  });
+}
+
+function saveSentence() {
+  if (!currentEngSentence) return;
+  snowStorage.sentence.unshift({
+    kor: currentKorInput,
+    eng: currentEngSentence,
+    date: new Date().toLocaleDateString('ko-KR'),
+    savedAt: Date.now(),
+    reviewData: { level: 0, lastReview: Date.now() }
+  });
+  saveStorage();
+  renderHome();
+  showToast("보관함에 저장했어요! ⭐");
+}
+
+// ══════════════════════════════════════
+//  DIARY
+// ══════════════════════════════════════
+async function runDiary() {
+  const input = document.getElementById('diaryInput').value.trim();
+  if (!input) { alert("일기를 입력하세요!"); return; }
+
+  setLoading('diary', true);
+  document.getElementById('diaryResult').style.display = 'none';
+
+  const prompt = `
+영어 일기 첨삭 AI. 
+입력 (한글 또는 영어): "${input}"
+
+아래 JSON만 반환. 다른 텍스트 없이.
+{
+  "corrected": "자연스럽고 올바른 영어로 번역/첨삭된 전체 일기",
+  "grammar_points": [
+    {
+      "title": "문법 포인트 제목 (예: 과거 시제 Past Tense)",
+      "original": "원문에서 잘못되었거나 배울 수 있는 표현",
+      "fixed": "올바른 영어 표현",
+      "why": "왜 이렇게 쓰는지 초보자에게 아주 쉽게 설명. 예시 1~2개 포함.",
+      "pattern": "외워두면 좋은 패턴 공식 (예: I + 동사과거형 + 목적어)"
+    }
+  ],
+  "expressions": [{"eng":"유용한 영어 표현","kor":"한국어 뜻","tip":"언제 어떻게 쓰는지 짧게"}],
+  "today_vocab": [{"word":"오늘 일기에서 배울 단어","pron":"발음기호","pos":"품사","mean":"뜻"}]
+}
+grammar_points는 이 일기에서 배울 수 있는 핵심 문법/표현 포인트 2~3개.
+expressions는 실용 표현 3~4개.
+today_vocab은 일기에서 나온 중요 단어 4~5개.
+`;
+
+  try {
+    const res = await callGemini(prompt);
+    renderDiary(res);
+  } catch(e) {
+    alert("오류가 발생했어요. 다시 시도해주세요.");
+  } finally {
+    setLoading('diary', false);
+  }
+}
+
+function renderDiary(res) {
+  const area = document.getElementById('diaryResult');
+
+  // 영어 문장 단어별 발음 클릭
+  const safeText = res.corrected.replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, ' ');
+  const safeForAttr = encodeURIComponent(res.corrected);
+  const wordHTML = res.corrected.split(' ').map(w => {
+    const clean = w.toLowerCase().replace(/[.,!?;:']/g,'');
+    return `<span class="word-tap" style="font-size:18px;" onclick="speakText('${clean}', 0.9)">${w}</span>`;
+  }).join(' ');
+
+  // 문법 포인트 카드
+  let grammarHTML = '';
+  (res.grammar_points || []).forEach((g, idx) => {
+    const colors = ['var(--accent)', 'var(--accent2)', 'var(--gold)'];
+    const c = colors[idx % 3];
+    grammarHTML += `
+    <div style="background:var(--surface2); border-radius:14px; padding:16px; margin-bottom:12px; border-left:4px solid ${c};">
+      <div style="font-size:12px; font-weight:700; color:${c}; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:10px;">
+        📍 ${g.title}
+      </div>
+      <div style="display:flex; gap:10px; margin-bottom:12px; flex-wrap:wrap; align-items:center;">
+        <div style="background:rgba(255,107,157,0.15); border-radius:8px; padding:7px 12px; font-size:13px; color:#ff8fb0;">
+          ✗ ${g.original || '-'}
+        </div>
+        <div style="color:var(--text-muted); font-size:16px;">→</div>
+        <div style="background:rgba(86,211,100,0.15); border-radius:8px; padding:7px 12px; font-size:13px; color:var(--green); cursor:pointer;"
+             onclick="speakText('${(g.fixed||'').replace(/'/g,"\\'")}', 0.9)">
+          ✓ ${g.fixed || '-'} 🔊
+        </div>
+      </div>
+      <div style="font-size:13px; color:#ccc; line-height:1.7; margin-bottom:10px;">${g.why || ''}</div>
+      ${g.pattern ? `<div style="background:rgba(124,111,247,0.1); border-radius:8px; padding:8px 12px; font-size:12px; color:var(--accent); font-weight:600;">
+        💡 패턴: ${g.pattern}
+      </div>` : ''}
+    </div>`;
+  });
+
+  // 유용한 표현 pills
+  let exprHTML = '';
+  (res.expressions || []).forEach(e => {
+    exprHTML += `<div class="expr-pill" onclick="speakText('${e.eng.replace(/'/g,"\\'")}', 0.9)">
+      <span style="color:var(--accent2); font-weight:600;">${e.eng}</span>
+      <span style="color:var(--text-muted); font-size:11px; margin-left:4px;">${e.kor}</span>
+      ${e.tip ? `<div style="font-size:10px; color:var(--text-muted); margin-top:3px;">${e.tip}</div>` : ''}
+    </div>`;
+  });
+
+  // 오늘의 어휘
+  let vocabHTML = '';
+  (res.today_vocab || []).forEach(v => {
+    vocabHTML += `<div class="snap-word-row" onclick="speakText('${(v.word||'').replace(/'/g,"\\'")}', 0.9)">
+      <div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span class="snap-word-eng">${v.word}</span>
+          ${v.pos ? `<span style="font-size:10px; color:var(--gold); background:rgba(245,200,66,0.15); padding:2px 6px; border-radius:4px;">${v.pos}</span>` : ''}
+        </div>
+        ${v.pron ? `<div style="font-size:11px; color:var(--accent2); margin-top:1px;">[${v.pron}]</div>` : ''}
+        <div class="snap-word-kor">${v.mean}</div>
+      </div>
+      <span class="snap-speak">🔊</span>
+    </div>`;
+  });
+
+  area.innerHTML = `
+    <div class="card" style="border-top: 3px solid var(--green);">
+      <div class="section-label">AI 선생님의 추천 일기</div>
+      <div class="diary-corrected">${wordHTML}</div>
+      <div class="speed-row" style="margin-top:14px;">
+        <button class="btn-ghost" onclick="speakText(decodeURIComponent('${safeForAttr}'), 0.5)">x0.5</button>
+        <button class="btn-ghost" onclick="speakText(decodeURIComponent('${safeForAttr}'), 0.8)">x0.8</button>
+        <button class="btn-ghost" onclick="speakText(decodeURIComponent('${safeForAttr}'), 1.0)">x1.0</button>
+      </div>
+    </div>
+
+    <div class="section-head">문법 & 표현 포인트</div>
+    ${grammarHTML}
+
+    <div class="card">
+      <div class="section-label">💬 유용한 표현 (클릭하면 발음)</div>
+      <div class="expr-list" style="flex-direction:column; gap:8px;">${exprHTML}</div>
+    </div>
+
+    ${vocabHTML ? `<div class="card card-accent-green">
+      <div class="section-label">📚 오늘의 어휘</div>
+      ${vocabHTML}
+    </div>` : ''}
+  `;
+  area.style.display = 'block';
+  speakText(res.corrected, 0.9);
+}
+
+// ══════════════════════════════════════
+//  SNAP (PHOTO)
+// ══════════════════════════════════════
+function onSnapFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  snapMimeType = file.type;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    snapBase64 = ev.target.result.split(',')[1];
+    const area = document.getElementById('uploadArea');
+    area.classList.add('has-image');
+    area.innerHTML = `<img src="${ev.target.result}" alt="uploaded">`;
+    document.getElementById('snapBtn').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+async function runSnap() {
+  if (!snapBase64) return;
+  setLoading('snap', true);
+  document.getElementById('snapResult').style.display = 'none';
+
+  const prompt = `
+이 사진을 분석해서 아래 JSON만 반환해. 다른 텍스트 없이.
+{
+  "words": [{"eng":"기초 단어","pron":"발음기호","pos":"품사 (명사/동사/형용사 등)","kor":"뜻"}],
+  "sentences_basic": [{"eng":"기초 문장","kor":"해석"}],
+  "sentences_detail": [{"eng":"상세 묘사 문장","kor":"해석"}],
+  "grammar_tips": [{"title":"문법 포인트 제목","desc":"사진 속 문장과 연결해서 초보자에게 쉽게 설명. 패턴 공식 포함."}]
+}
+words는 사진에서 볼 수 있는 기초 영어 단어 5~6개. 각 단어에 발음기호와 품사 필수.
+sentences_basic은 사진을 설명하는 간단한 문장 3개.
+sentences_detail은 사진을 더 자세히 묘사하는 문장 3개.
+grammar_tips는 이 사진의 문장들에서 배울 수 있는 초보자용 문법 포인트 2개.
+`;
+
+  try {
+    const res = await callGemini(prompt, { mime: snapMimeType, b64: snapBase64 });
+    renderSnap(res);
+  } catch(e) {
+    alert("사진 분석에 실패했어요. 다시 시도해주세요.");
+  } finally {
+    setLoading('snap', false);
+  }
+}
+
+function renderSnap(res) {
+  let html = '';
+
+  html += `<div class="card card-accent-green">
+    <div class="section-label">기초 단어</div>`;
+  (res.words || []).forEach(w => {
+    html += `<div class="snap-word-row" onclick="speakText('${(w.eng||'').replace(/'/g,"\\'")}', 0.9)">
+      <div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span class="snap-word-eng">${w.eng}</span>
+          ${w.pos ? `<span style="font-size:10px; color:var(--gold); background:rgba(245,200,66,0.15); padding:2px 6px; border-radius:4px;">${w.pos}</span>` : ''}
+        </div>
+        ${w.pron ? `<div style="font-size:11px; color:var(--accent2); margin-top:2px;">[${w.pron}]</div>` : ''}
+        <div class="snap-word-kor">${w.kor}</div>
+      </div>
+      <span class="snap-speak">🔊</span>
+    </div>`;
+  });
+  html += `</div>`;
+
+  html += `<div class="card">
+    <div class="section-label">유용한 표현</div>`;
+  (res.sentences_basic || []).forEach(s => {
+    html += `<div class="example-row" onclick="speakText('${s.eng.replace(/'/g,"\\'")}', 0.8)">
+      <div class="example-eng"><span class="speak-icon">🔊</span>${s.eng}</div>
+      <div class="example-kor">${s.kor}</div>
+    </div>`;
+  });
+  html += `</div>`;
+
+  html += `<div class="card card-accent-left">
+    <div class="section-label">상세 묘사</div>`;
+  (res.sentences_detail || []).forEach(s => {
+    html += `<div class="example-row" onclick="speakText('${s.eng.replace(/'/g,"\\'")}', 0.8)">
+      <div class="example-eng"><span class="speak-icon">🔊</span>${s.eng}</div>
+      <div class="example-kor">${s.kor}</div>
+    </div>`;
+  });
+  html += `</div>`;
+
+  // 문법 포인트
+  if (res.grammar_tips && res.grammar_tips.length > 0) {
+    html += `<div class="section-head">문법 포인트</div>`;
+    res.grammar_tips.forEach(g => {
+      html += `<div class="guide-card">
+        <div class="guide-title">📍 ${g.title}</div>
+        <div class="guide-desc">${g.desc}</div>
+      </div>`;
+    });
+  }
+
+  document.getElementById('snapResult').innerHTML = html;
+  document.getElementById('snapResult').style.display = 'block';
+}
+
+// ══════════════════════════════════════
+//  WORDBOOK
+// ══════════════════════════════════════
+function setLevel(level) {
+  currentLevel = level;
+  const map = { beginner: 'lvlBeg', intermediate: 'lvlMid', advanced: 'lvlAdv' };
+  document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(map[level]).classList.add('active');
+  getNextWord();
+}
+
+async function getNextWord() {
+  setLoading('word', true);
+  document.getElementById('wordDisplay').innerHTML = '';
+  document.getElementById('wordActions').style.display = 'none';
+  document.getElementById('masteredCount').innerText = '';
+
+  const exclude = seenWords.concat(masteredWords).slice(-50).join(',');
+  const levelMap = { beginner: '왕초보 (초등 수준, 매우 쉬운 일상 단어)', intermediate: '중급 (중학교 수준, 일상/여행 단어)', advanced: '고급 (비즈니스/토익 수준)' };
+
+  const prompt = `
+수준: ${levelMap[currentLevel]}
+이미 본 단어 (제외): ${exclude || '없음'}
+
+새로운 단어 하나를 선택해서 아래 JSON만 반환. 다른 텍스트 없이.
+{
+  "word": "영어 단어",
+  "pron": "발음기호 (예: /mɪlk/)",
+  "pos": "품사 (명사/동사/형용사/부사/전치사 등)",
+  "mean": "한국어 뜻",
+  "tip": "이 단어를 쉽게 기억하는 방법, 어원, 주의사항 등 초보자 도움말",
+  "step1": {"eng": "아주 간단한 예문", "kor": "해석"},
+  "step2": {"eng": "일상에서 쓰는 예문", "kor": "해석"},
+  "step3": {"eng": "조금 더 긴 실용 예문", "kor": "해석"}
+}
+`;
+
+  try {
+    const res = await callGemini(prompt);
+    currentWordData = res;
+    seenWords.push(res.word);
+    if (seenWords.length > 200) seenWords = seenWords.slice(-200);
+    localStorage.setItem('seenWords', JSON.stringify(seenWords));
+    renderWord(res);
+  } catch(e) {
+    document.getElementById('wordDisplay').innerHTML = `<div class="empty-state"><div class="empty-icon">😅</div><div class="empty-text">단어를 불러오지 못했어요.<br>다시 시도해보세요.</div></div>`;
+  } finally {
+    setLoading('word', false);
+  }
+}
+
+function renderWord(res) {
+  const html = `
+    <div class="card">
+      <div class="word-hero">
+        <div class="word-main" onclick="speakText('${res.word}', 0.8)">${res.word} <span class="speak-big">🔊</span></div>
+        <div style="display:flex; align-items:center; justify-content:center; gap:10px; margin-top:6px; flex-wrap:wrap;">
+          ${res.pron ? `<span style="font-size:15px; color:var(--accent2); font-family:monospace;">${res.pron}</span>` : ''}
+          ${res.pos ? `<span style="font-size:11px; color:var(--gold); background:rgba(245,200,66,0.15); padding:3px 8px; border-radius:6px; font-weight:700;">${res.pos}</span>` : ''}
+        </div>
+        <div class="word-mean">${res.mean}</div>
+      </div>
+      ${res.tip ? `<div style="font-size:12px; color:var(--text-muted); background:var(--surface2); padding:10px 12px; border-radius:10px; margin-bottom:14px; line-height:1.6;">💡 ${res.tip}</div>` : ''}
+      <div class="step-card step1">
+        <div class="step-title">Step 1 · 기초</div>
+        <div class="step-eng" onclick="speakText('${res.step1.eng.replace(/'/g,"\\'")}', 0.8)">${res.step1.eng} 🔊</div>
+        <div class="step-kor">${res.step1.kor}</div>
+      </div>
+      <div class="step-card step2">
+        <div class="step-title">Step 2 · 일상</div>
+        <div class="step-eng" onclick="speakText('${res.step2.eng.replace(/'/g,"\\'")}', 0.8)">${res.step2.eng} 🔊</div>
+        <div class="step-kor">${res.step2.kor}</div>
+      </div>
+      <div class="step-card step3">
+        <div class="step-title">Step 3 · 심화</div>
+        <div class="step-eng" onclick="speakText('${res.step3.eng.replace(/'/g,"\\'")}', 0.8)">${res.step3.eng} 🔊</div>
+        <div class="step-kor">${res.step3.kor}</div>
+      </div>
+    </div>
+  `;
+  document.getElementById('wordDisplay').innerHTML = html;
+  document.getElementById('wordActions').style.display = 'flex';
+  const total = masteredWords.length;
+  document.getElementById('masteredCount').innerText = total > 0 ? `마스터한 단어: ${total}개` : '';
+  speakText(res.word, 0.8);
+  markGoalDone('word');
+}
+
+function markKnown() {
+  if (!currentWordData) return;
+  if (!masteredWords.includes(currentWordData.word)) {
+    masteredWords.push(currentWordData.word);
+    localStorage.setItem('masteredWords', JSON.stringify(masteredWords));
+    snowStorage.word.unshift({ word: currentWordData.word, mean: currentWordData.mean });
+    saveStorage();
+    showToast("'"+currentWordData.word+"' 마스터! ✅");
+  }
+  updateSidebarStats();
+  getNextWord();
+}
+
+// ══════════════════════════════════════
+//  QUIZ
+// ══════════════════════════════════════
+function setQuizDiff(diff) {
+  quizDifficulty = diff;
+  document.querySelectorAll('#tab-quiz .level-btn').forEach(b => b.classList.remove('active'));
+  const map = { easy: 'qDiffEasy', medium: 'qDiffMid', hard: 'qDiffHard' };
+  document.getElementById(map[diff]).classList.add('active');
+}
+
+async function runQuiz() {
+  setLoading('quiz', true);
+  document.getElementById('quizPanel').innerHTML = '';
+
+  const saved = snowStorage.sentence.slice(0, 10).map(s => s.eng).join(', ');
+  const diffMap = {
+    easy: '왕초보 수준. 매우 기본적인 단어 뜻 맞추기, 초등 수준 문장의 빈칸 채우기. 보기 중 정답이 명확하게 구분됨.',
+    medium: '중급 수준. 문법 문제 포함 (시제, 전치사, 관사 등). 자주 헷갈리는 표현 비교. 보기가 비슷해서 생각이 필요함.',
+    hard: '고급 수준. 숙어/관용표현, 문법 응용, 문장 배열, 틀린 문장 찾기. 난이도 있는 어휘와 복잡한 문법 포함.'
+  };
+  const prompt = `
+영어 학습 퀴즈 생성. 난이도: ${diffMap[quizDifficulty]}
+저장된 문장 참고 (있으면 활용): ${saved || '없음'}.
+아래 JSON만 반환. 다른 텍스트 없이.
+{
+  "type": "multiple",
+  "q": "문제 (한글 또는 영어 혼용 가능)",
+  "opts": ["보기1", "보기2", "보기3", "보기4"],
+  "ans": 정답_인덱스_숫자,
+  "exp": "정답 해설. 왜 이게 맞는지, 왜 다른 보기는 틀렸는지 초보자에게 친절히 설명."
+}
+문제 유형은 빈칸 채우기 / 단어 뜻 맞추기 / 올바른 문장 고르기 / 틀린 부분 찾기 중 랜덤.
+보기는 반드시 4개.
+`;
+
+  try {
+    const res = await callGemini(prompt);
+    renderQuizPanel(res);
+  } catch(e) {
+    document.getElementById('quizPanel').innerHTML = `<div class="empty-state"><div class="empty-icon">😅</div><div class="empty-text">문제를 불러오지 못했어요.</div></div>`;
+  } finally {
+    setLoading('quiz', false);
+  }
+}
+
+function renderQuizPanel(res) {
+  let html = `<div class="quiz-big-q">${res.q}</div>`;
+  (res.opts || []).forEach((opt, i) => {
+    html += `<div class="quiz-option" id="qp-${i}" onclick="checkQuizPanel(${i}, ${res.ans}, '${(res.exp||'').replace(/'/g,"\\'")}')">
+      <div class="quiz-option-num">${i+1}</div>${opt}
+    </div>`;
+  });
+  document.getElementById('quizPanel').innerHTML = html;
+}
+
+function checkQuizPanel(chosen, correct, exp) {
+  document.querySelectorAll('#quizPanel .quiz-option').forEach((el, i) => {
+    el.onclick = null;
+    if (i === correct) el.classList.add('correct');
+    else if (i === chosen && chosen !== correct) el.classList.add('wrong');
+  });
+  markGoalDone('quiz');
+  if (exp) {
+    const expEl = document.createElement('div');
+    expEl.className = 'card';
+    expEl.style.marginTop = '12px';
+    expEl.innerHTML = `<div class="section-label">해설</div><div style="font-size:13px; color:#ccc; line-height:1.6;">${exp}</div>`;
+    document.getElementById('quizPanel').appendChild(expEl);
+  }
+}
+
+// ══════════════════════════════════════
+//  WORD MODAL
+// ══════════════════════════════════════
+function openWordModal(d) {
+  currentWordModal = d;
+  document.getElementById('mWord').innerText = d.word;
+  document.getElementById('mMean').innerText = d.mean;
+  document.getElementById('mTip').innerText = d.tip || '';
+
+  let exHTML = '';
+  if (d.exs && d.exs.length > 0) {
+    d.exs.forEach(ex => {
+      const eng = ex.split('(')[0].trim();
+      const kor = ex.includes('(') ? ex.slice(ex.indexOf('(')+1, ex.lastIndexOf(')')) : '';
+      exHTML += `<div class="modal-ex" onclick="speakText('${eng.replace(/'/g,"\\'")}', 0.9)">
+        <div class="modal-ex-eng">🔊 ${eng}</div>
+        ${kor ? `<div class="modal-ex-kor">${kor}</div>` : ''}
+      </div>`;
+    });
+  }
+  document.getElementById('mExamples').innerHTML = exHTML || `<div style="font-size:12px;color:var(--text-muted);">구글 사전에서 더 많은 예문을 확인하세요.</div>`;
+  document.getElementById('mBtnSave').onclick = () => {
+    snowStorage.word.unshift({ word: d.word, mean: d.mean });
+    saveStorage();
+    showToast("단어 저장 완료! ⭐");
+    closeModal();
+  };
+  document.getElementById('wordModal').classList.add('open');
+  speakText(d.word, 0.9);
+}
+
+function closeModal() {
+  document.getElementById('wordModal').classList.remove('open');
+}
+
+function openDict() {
+  if (currentWordModal) {
+    window.open(`https://translate.google.com/?sl=en&tl=ko&text=${encodeURIComponent(currentWordModal.word)}&op=translate`, '_blank');
+  }
+  closeModal();
+}
+
+// ══════════════════════════════════════
+//  SIDEBAR
+// ══════════════════════════════════════
+function openSidebar() {
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sidebarOverlay').classList.add('open');
+  renderSaveList();
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+}
+function switchSaveTab(tab) {
+  currentSaveTab = tab;
+  document.getElementById('tabSentBtn').classList.toggle('active', tab === 'sentence');
+  document.getElementById('tabWordBtn').classList.toggle('active', tab === 'word');
+  renderSaveList();
+}
+function renderSaveList() {
+  const search = (document.getElementById('storageSearch').value || '').toLowerCase();
+  let items = snowStorage[currentSaveTab] || [];
+  if (search) items = items.filter(it =>
+    (it.kor && it.kor.toLowerCase().includes(search)) ||
+    (it.eng && it.eng.toLowerCase().includes(search)) ||
+    (it.word && it.word.toLowerCase().includes(search)) ||
+    (it.mean && it.mean.toLowerCase().includes(search))
+  );
+  const el = document.getElementById('saveListEl');
+  if (items.length === 0) {
+    el.innerHTML = `<div style="text-align:center; padding:32px 0; color:var(--text-muted); font-size:13px;">아직 저장된 내용이 없어요</div>`;
+  } else {
+    el.innerHTML = items.map((item, i) => {
+      if (currentSaveTab === 'sentence') {
+        return `<div class="save-item">
+          <button class="save-del" onclick="deleteItem('sentence',${i})">×</button>
+          <div class="save-item-kor">${item.kor || ''}</div>
+          <div class="save-item-eng" onclick="speakText('${(item.eng||'').replace(/'/g,"\\'")}', 0.9)">${item.eng || ''} 🔊</div>
+          ${item.date ? `<div style="font-size:10px; color:var(--text-muted); margin-top:4px;">${item.date}</div>` : ''}
+        </div>`;
+      } else {
+        return `<div class="save-item">
+          <button class="save-del" onclick="deleteItem('word',${i})">×</button>
+          <div class="save-item-kor" style="font-size:15px; color:var(--accent2);" onclick="speakText('${(item.word||'').replace(/'/g,"\\'")}', 0.9)">${item.word} 🔊</div>
+          <div class="save-item-eng">${item.mean}</div>
+        </div>`;
+      }
+    }).join('');
+  }
+  updateSidebarStats();
+}
+
+function deleteItem(type, idx) {
+  snowStorage[type].splice(idx, 1);
+  saveStorage();
+  renderSaveList();
+}
+
+function updateSidebarStats() {
+  document.getElementById('statSentences').innerText = snowStorage.sentence.length;
+  document.getElementById('statWords').innerText = snowStorage.word.length;
+  document.getElementById('statMastered').innerText = masteredWords.length;
+  document.getElementById('headerSaveCount').innerText = snowStorage.sentence.length + snowStorage.word.length;
+}
+
+// ══════════════════════════════════════
+//  STORAGE
+// ══════════════════════════════════════
+function saveStorage() {
+  localStorage.setItem('snowStorage', JSON.stringify(snowStorage));
+  updateSidebarStats();
+}
+
+// ══════════════════════════════════════
+//  LOADING HELPERS
+// ══════════════════════════════════════
+function setLoading(prefix, on) {
+  const bar = document.getElementById(prefix + 'LoadBar');
+  const txt = document.getElementById(prefix + 'LoadText');
+  if (bar) bar.classList.toggle('active', on);
+  if (txt) txt.classList.toggle('active', on);
+}
+
+// ══════════════════════════════════════
+//  TOAST
+// ══════════════════════════════════════
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.innerText = msg;
+  t.style.cssText = `
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+    background: var(--surface); border: 1px solid var(--border); color: var(--text);
+    padding: 12px 20px; border-radius: 30px; font-size: 13px; font-weight: 600;
+    z-index: 9999; white-space: nowrap; box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    animation: fadeUp 0.3s ease;
+  `;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2200);
+}
+
+// ══════════════════════════════════════
+//  STREAK & HOME DASHBOARD
+// ══════════════════════════════════════
+function initStreak() {
+  // 날짜가 바뀌면 todayGoals 초기화
+  const lastGoalDate = localStorage.getItem('lastGoalDate') || '';
+  if (lastGoalDate !== todayStr) {
+    todayGoals = { translate: false, word: false, quiz: false, any: false };
+    localStorage.setItem('todayGoals', JSON.stringify(todayGoals));
+    localStorage.setItem('lastGoalDate', todayStr);
+  }
+
+  // 어제 학습했는지 체크해서 스트릭 연속 여부 판단
+  if (streakData.lastDate !== todayStr) {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yStr = yesterday.toLocaleDateString('ko-KR');
+    if (streakData.lastDate !== yStr && streakData.lastDate !== '') {
+      // 어제도 아니고 오늘도 아니면 스트릭 초기화
+      streakData.days = 0;
+    }
+    streakData.todayDone = false;
+    saveStreak();
+  }
+  renderHome();
+}
+
+function markGoalDone(type) {
+  if (todayGoals[type]) return;
+  todayGoals[type] = true;
+  localStorage.setItem('todayGoals', JSON.stringify(todayGoals));
+
+  // 모든 목표 완료 시 스트릭 증가
+  const allDone = Object.values(todayGoals).every(v => v);
+  if (allDone && !streakData.todayDone) {
+    streakData.days += 1;
+    streakData.best = Math.max(streakData.best, streakData.days);
+    streakData.lastDate = todayStr;
+    streakData.todayDone = true;
+    saveStreak();
+    showToast('🔥 오늘 목표 완료! 스트릭 ' + streakData.days + '일!');
+  }
+  renderHome();
+}
+
+function saveStreak() {
+  localStorage.setItem('streakData', JSON.stringify(streakData));
+}
+
+function renderHome() {
+  // 인사말
+  const hour = new Date().getHours();
+  const greet = hour < 12 ? '좋은 아침이에요! ☀️' : hour < 18 ? '안녕하세요! 👋' : '수고하셨어요! 🌙';
+  document.getElementById('homeGreeting').innerHTML = `${greet}<br><span>오늘도 함께 배워요</span>`;
+
+  // 스트릭
+  document.getElementById('streakDays').textContent = streakData.days;
+  document.getElementById('streakBest').textContent = '최고 기록: ' + streakData.best + '일';
+  document.getElementById('todayDoneIcon').textContent = streakData.todayDone ? '✅' : '⭕';
+
+  // 통계
+  document.getElementById('homeTotalSent').textContent = snowStorage.sentence.length;
+  document.getElementById('homeTotalWord').textContent = snowStorage.word.length;
+  document.getElementById('homeMastered').textContent = masteredWords.length;
+
+  // 오늘 목표
+  const goalKeys = ['translate', 'word', 'quiz', 'any'];
+  let doneCount = 0;
+  goalKeys.forEach(k => {
+    const el = document.getElementById('goal-' + k);
+    if (el) {
+      if (todayGoals[k]) {
+        el.classList.add('done');
+        el.querySelector('.goal-check').textContent = '✓';
+        doneCount++;
+      } else {
+        el.classList.remove('done');
+        el.querySelector('.goal-check').textContent = goalKeys.indexOf(k) + 1;
+      }
+    }
+  });
+  const pct = Math.round((doneCount / goalKeys.length) * 100);
+  document.getElementById('goalPct').textContent = pct + '%';
+  document.getElementById('goalBar').style.width = pct + '%';
+
+  // 최근 저장 문장
+  const listEl = document.getElementById('homeRecentList');
+  const recent = snowStorage.sentence.slice(0, 4);
+  if (recent.length === 0) {
+    listEl.innerHTML = `<div style="text-align:center; padding:20px 0; color:var(--text-muted); font-size:13px;">아직 저장한 문장이 없어요.<br>분석탭에서 문장을 저장해보세요!</div>`;
+  } else {
+    const colors = ['rgba(124,111,247,0.15)', 'rgba(78,205,196,0.15)', 'rgba(245,200,66,0.15)', 'rgba(255,107,157,0.15)'];
+    const icons = ['✨', '✍️', '📖', '⚡'];
+    listEl.innerHTML = recent.map((item, i) => `
+      <div class="recent-item" onclick="speakText('${(item.eng||'').replace(/'/g,"\\'")}', 0.9)">
+        <div class="recent-icon" style="background:${colors[i%4]}">${icons[i%4]}</div>
+        <div class="recent-text">
+          <div class="recent-eng">${item.eng || ''}</div>
+          <div class="recent-kor">${item.kor || ''}</div>
+        </div>
+        <span style="color:var(--text-muted); font-size:18px;">🔊</span>
+      </div>`).join('');
+  }
+}
+
+// ══════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════
+updateSidebarStats();
+initStreak();
+initNavDrag();
+renderReview();
+renderStats();
+
+// ══════════════════════════════════════
+//  NAV DRAG SCROLL
+// ══════════════════════════════════════
+function initNavDrag() {
+  const nav = document.querySelector('.nav-bar');
+  if (!nav) return;
+  let isDown = false, startX = 0, scrollLeft = 0, moved = false;
+
+  // 마우스 드래그
+  nav.addEventListener('mousedown', e => {
+    isDown = true; moved = false;
+    nav.classList.add('dragging');
+    startX = e.pageX - nav.offsetLeft;
+    scrollLeft = nav.scrollLeft;
+  });
+  nav.addEventListener('mouseleave', () => { isDown = false; nav.classList.remove('dragging'); });
+  nav.addEventListener('mouseup', () => { isDown = false; nav.classList.remove('dragging'); });
+  nav.addEventListener('mousemove', e => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - nav.offsetLeft;
+    const walk = (x - startX) * 1.5;
+    if (Math.abs(walk) > 4) moved = true;
+    nav.scrollLeft = scrollLeft - walk;
+  });
+
+  // 탭 클릭 시 드래그 중이면 무시 (버튼 이벤트 보호)
+  nav.querySelectorAll('.nav-item').forEach(btn => {
+    btn.addEventListener('click', e => { if (moved) e.stopPropagation(); });
+  });
+}
+
+// ══════════════════════════════════════
+//  SPEECH RECOGNITION (따라말하기 채점)
+// ══════════════════════════════════════
+let recog = null;
+let isRecording = false;
+
+function toggleSpeechRecog() {
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    showToast('❌ 이 브라우저는 음성 인식을 지원하지 않아요 (Chrome 권장)');
+    return;
+  }
+  if (isRecording) {
+    stopRecording();
+  } else {
+    startRecording();
+  }
+}
+
+function startRecording() {
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recog = new SpeechRec();
+  recog.lang = 'en-US';
+  recog.interimResults = true;
+  recog.continuous = false;
+  recog.maxAlternatives = 1;
+
+  const btn = document.getElementById('micBtn');
+  const box = document.getElementById('transcriptBox');
+  const scoreArea = document.getElementById('scoreArea');
+
+  btn.innerHTML = '⏹ 말하는 중... (다시 누르면 중지)';
+  btn.classList.add('recording');
+  box.style.display = 'block';
+  box.textContent = '🎤 듣고 있어요... 지금 말해보세요!';
+  scoreArea.style.display = 'none';
+  isRecording = true;
+
+  let finalTranscript = '';
+
+  recog.onstart = () => {
+    box.textContent = '🎤 듣고 있어요... 지금 말해보세요!';
+  };
+
+  recog.onresult = e => {
+    let interim = '';
+    finalTranscript = '';
+    for (let i = 0; i < e.results.length; i++) {
+      if (e.results[i].isFinal) {
+        finalTranscript += e.results[i][0].transcript;
+      } else {
+        interim += e.results[i][0].transcript;
+      }
+    }
+    box.textContent = finalTranscript || interim || '...';
+  };
+
+  recog.onend = () => {
+    isRecording = false;
+    btn.innerHTML = '🎤 다시 따라 말하기';
+    btn.classList.remove('recording');
+    const result = finalTranscript || box.textContent;
+    if (result && result !== '🎤 듣고 있어요... 지금 말해보세요!' && result !== '...') {
+      scorePronunciation(currentEngSentence, result);
+    } else {
+      box.textContent = '아무 소리도 인식되지 않았어요. 다시 눌러서 말해보세요!';
+    }
+  };
+
+  recog.onerror = e => {
+    isRecording = false;
+    btn.innerHTML = '🎤 따라 말하고 채점받기';
+    btn.classList.remove('recording');
+    const errMap = {
+      'not-allowed': '❌ 마이크 권한이 거부됐어요.\n브라우저 주소창 왼쪽 🔒 아이콘을 눌러서 마이크 권한을 허용해주세요.',
+      'no-speech': '🔇 소리가 감지되지 않았어요. 마이크에 가까이 대고 다시 시도해보세요.',
+      'audio-capture': '🎙️ 마이크를 찾을 수 없어요. 마이크가 연결되어 있는지 확인해주세요.',
+      'network': '🌐 네트워크 오류예요. 인터넷 연결을 확인해주세요.',
+      'aborted': '중단됐어요. 다시 시도해보세요.',
+    };
+    box.style.display = 'block';
+    box.textContent = errMap[e.error] || `오류: ${e.error} — 다시 시도해보세요.`;
+  };
+
+  try {
+    recog.start();
+  } catch(e) {
+    isRecording = false;
+    btn.innerHTML = '🎤 따라 말하고 채점받기';
+    btn.classList.remove('recording');
+    box.textContent = '음성 인식 시작 실패: ' + e.message;
+  }
+}
+
+function stopRecording() {
+  if (recog) recog.stop();
+}
+
+function scorePronunciation(original, spoken) {
+  const normalize = s => s.toLowerCase().replace(/[.,!?;:'"]/g, '').trim();
+  const origWords = normalize(original).split(/\s+/);
+  const spokenWords = normalize(spoken).split(/\s+/);
+
+  let matched = 0;
+  const usedIdx = new Set();
+  const resultWords = origWords.map(ow => {
+    const idx = spokenWords.findIndex((sw, i) => !usedIdx.has(i) && sw === ow);
+    if (idx !== -1) { usedIdx.add(idx); matched++; return `<span class="diff-match">${ow}</span>`; }
+    return `<span class="diff-miss">${ow}</span>`;
+  });
+
+  const score = Math.round((matched / origWords.length) * 100);
+  const color = score >= 80 ? 'var(--green)' : score >= 50 ? 'var(--gold)' : 'var(--accent3)';
+  const comments = {
+    100: '🏆 완벽해요! 발음이 정확해요!',
+    80:  '🎉 아주 잘했어요! 거의 완벽!',
+    60:  '👍 잘하고 있어요! 조금 더 연습해봐요.',
+    40:  '💪 괜찮아요! 천천히 다시 해봐요.',
+    0:   '😊 처음엔 다 어려워요. 한 단어씩 해봐요!'
+  };
+  const commentKey = [100,80,60,40,0].find(k => score >= k);
+
+  document.getElementById('transcriptBox').innerHTML =
+    `<div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">내가 말한 것:</div>` +
+    `<div style="color:var(--text);margin-bottom:8px;">${spoken}</div>` +
+    `<div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">원문 대조:</div>` +
+    resultWords.join(' ');
+
+  const scoreArea = document.getElementById('scoreArea');
+  scoreArea.style.display = 'block';
+  document.getElementById('scoreBarFill').style.width = score + '%';
+  document.getElementById('scoreBarFill').style.background = `linear-gradient(90deg, ${color}, ${color})`;
+  document.getElementById('scoreNum').style.color = color;
+  document.getElementById('scoreNum').textContent = score + '%';
+  document.getElementById('scoreComment').textContent = comments[commentKey];
+}
+
+// ══════════════════════════════════════
+//  REVIEW (망각곡선 복습)
+// ══════════════════════════════════════
+// 에빙하우스 망각곡선: 저장 후 1일, 3일, 7일, 14일, 30일 복습
+const REVIEW_INTERVALS = [1, 3, 7, 14, 30];
+
+function getReviewQueue() {
+  const now = Date.now();
+  const msDay = 86400000;
+  return snowStorage.sentence.filter(s => {
+    if (!s.savedAt) return false;
+    const reviewData = s.reviewData || { level: 0, lastReview: s.savedAt };
+    const level = reviewData.level || 0;
+    if (level >= REVIEW_INTERVALS.length) return false; // 완전 마스터
+    const nextInterval = REVIEW_INTERVALS[level] * msDay;
+    return (now - reviewData.lastReview) >= nextInterval;
+  });
+}
+
+function renderReview() {
+  reviewQueue = getReviewQueue();
+  reviewIdx = 0;
+  showNextReview();
+}
+
+function showNextReview() {
+  const panel = document.getElementById('reviewPanel');
+  const doneMsg = document.getElementById('reviewDoneMsg');
+  if (!panel) return;
+
+  if (reviewQueue.length === 0 || reviewIdx >= reviewQueue.length) {
+    panel.style.display = 'none';
+    if (doneMsg) doneMsg.style.display = 'block';
+    return;
+  }
+
+  doneMsg && (doneMsg.style.display = 'none');
+  panel.style.display = 'block';
+  reviewFlipped = false;
+
+  const item = reviewQueue[reviewIdx];
+  const level = (item.reviewData && item.reviewData.level) || 0;
+  const nextLevel = Math.min(level + 1, REVIEW_INTERVALS.length - 1);
+  const labelText = ['첫 복습', '2회차', '3회차', '4회차', '마지막 복습'][level] || '복습';
+  const remaining = reviewQueue.length - reviewIdx;
+
+  panel.innerHTML = `
+    <div style="text-align:center; font-size:12px; color:var(--text-muted); margin-bottom:12px;">
+      남은 복습 <strong style="color:var(--accent);">${remaining}</strong>개
+    </div>
+    <div class="review-card">
+      <div class="review-badge">${labelText}</div>
+      <div class="review-q">🇰🇷 이 문장을 영어로 말할 수 있나요?</div>
+      <div style="font-size:18px; font-weight:700; text-align:center; color:var(--text); margin-bottom:16px; padding:12px; background:var(--surface2); border-radius:12px;">
+        ${item.kor || ''}
+      </div>
+      <div id="reviewAnswerWrap" style="display:none;">
+        <div class="review-answer" onclick="speakText('${(item.eng||'').replace(/'/g,"\\'")}', 0.9)">
+          ${item.eng || ''} 🔊
+        </div>
+        <div style="font-size:11px; color:var(--text-muted); text-align:center; margin-bottom:12px;">탭하면 발음을 들을 수 있어요</div>
+        <div class="review-btns">
+          <button class="btn-review-ok" onclick="reviewResult(true)">✅ 기억했어요!</button>
+          <button class="btn-review-again" onclick="reviewResult(false)">🔄 다시 볼게요</button>
+        </div>
+      </div>
+      <button class="btn-primary" id="reviewFlipBtn" onclick="flipReview()" style="margin-bottom:0;">
+        👀 정답 보기
+      </button>
+    </div>
+  `;
+}
+
+function flipReview() {
+  document.getElementById('reviewAnswerWrap').style.display = 'block';
+  document.getElementById('reviewFlipBtn').style.display = 'none';
+  reviewFlipped = true;
+  const item = reviewQueue[reviewIdx];
+  speakText(item.eng, 0.9);
+}
+
+function reviewResult(correct) {
+  const item = reviewQueue[reviewIdx];
+  const sentIdx = snowStorage.sentence.findIndex(s => s.eng === item.eng && s.kor === item.kor);
+  if (sentIdx !== -1) {
+    const current = snowStorage.sentence[sentIdx];
+    const level = (current.reviewData && current.reviewData.level) || 0;
+    snowStorage.sentence[sentIdx].reviewData = {
+      level: correct ? Math.min(level + 1, REVIEW_INTERVALS.length) : Math.max(0, level - 1),
+      lastReview: Date.now()
+    };
+    saveStorage();
+  }
+  reviewIdx++;
+  showNextReview();
+}
+
+// ══════════════════════════════════════
+//  STATS (학습 통계)
+// ══════════════════════════════════════
+function logTabUsage(tabId) {
+  tabUsage[tabId] = (tabUsage[tabId] || 0) + 1;
+  localStorage.setItem('tabUsage', JSON.stringify(tabUsage));
+  const today = new Date().toLocaleDateString('ko-KR');
+  learningLog[today] = (learningLog[today] || 0) + 1;
+  localStorage.setItem('learningLog', JSON.stringify(learningLog));
+}
+
+function renderStats() {
+  const el = id => document.getElementById(id);
+  if (!el('statTotalDays')) return;
+
+  const totalDays = Object.keys(learningLog).length;
+  el('statTotalDays').textContent = totalDays;
+  el('statTotalSent2').textContent = snowStorage.sentence.length;
+  el('statTotalWord2').textContent = snowStorage.word.length;
+  el('statStreak').textContent = streakData.days;
+  el('statBest').textContent = streakData.best;
+  el('statMasteredCount').textContent = masteredWords.length;
+
+  // 마스터 단어 태그
+  const mwEl = el('masteredWordList');
+  if (mwEl) {
+    mwEl.innerHTML = masteredWords.length === 0
+      ? '<div style="font-size:13px;color:var(--text-muted);">아직 마스터한 단어가 없어요. 단어장에서 학습해보세요!</div>'
+      : masteredWords.map(w => `<span style="padding:5px 10px;background:rgba(86,211,100,0.15);border:1px solid var(--green);border-radius:20px;font-size:12px;color:var(--green);font-weight:600;">${w}</span>`).join('');
+  }
+
+  // 탭별 사용 차트
+  const chartEl = el('tabUsageChart');
+  if (chartEl) {
+    const tabNames = { home:'🏠홈', translate:'✨분석', diary:'✍️일기', snap:'📸찰칵', words:'📖단어장', quiz:'⚡퀴즈', movie:'🎬영화', lyrics:'🎵가사', review:'🔁복습' };
+    const maxVal = Math.max(1, ...Object.values(tabUsage));
+    chartEl.innerHTML = Object.entries(tabNames).map(([k, name]) => {
+      const val = tabUsage[k] || 0;
+      const pct = Math.round((val / maxVal) * 100);
+      const color = k === 'translate' ? 'var(--accent)' : k === 'words' ? 'var(--accent2)' : k === 'quiz' ? 'var(--gold)' : 'var(--accent3)';
+      return `<div class="bar-chart-row">
+        <div class="bar-label">${name}</div>
+        <div class="bar-bg"><div class="bar-fill" style="width:${pct}%;background:${color};"></div></div>
+        <div class="bar-val">${val}</div>
+      </div>`;
+    }).join('');
+  }
+
+  // 30일 히트맵
+  const hmEl = el('heatmapArea');
+  if (hmEl) {
+    const cells = [];
+    for (let i = 29; i >= 0; i--) {
+      const d = new Date(); d.setDate(d.getDate() - i);
+      const key = d.toLocaleDateString('ko-KR');
+      const cnt = learningLog[key] || 0;
+      const lv = cnt === 0 ? '' : cnt < 3 ? 'lv1' : cnt < 6 ? 'lv2' : cnt < 10 ? 'lv3' : 'lv4';
+      cells.push(`<div class="heatmap-cell ${lv}" title="${key}: ${cnt}회"></div>`);
+    }
+    hmEl.innerHTML = cells.join('');
+  }
+}
+
+// ══════════════════════════════════════
+//  MOVIE QUOTE
+// ══════════════════════════════════════
+function setMovieGenre(genre, kor) {
+  currentMovieGenre = genre;
+  currentMovieGenreKor = kor;
+  document.querySelectorAll('#tab-movie .level-btn').forEach(b => b.classList.remove('active'));
+  const idMap = { thriller:'mg-thriller', action:'mg-action', drama:'mg-drama', comedy:'mg-comedy', 'sci-fi':'mg-scifi' };
+  if (idMap[genre]) document.getElementById(idMap[genre]).classList.add('active');
+}
+
+async function runMovieQuote() {
+  setLoading('movie', true);
+  document.getElementById('movieResult').innerHTML = '';
+
+  const prompt = `
+영어 학습용 영화 명대사 선생님. 장르: ${currentMovieGenreKor}(${currentMovieGenre})
+아래 JSON만 반환. 다른 텍스트 없이.
+{
+  "movie": "영화 제목",
+  "year": "개봉연도",
+  "character": "대사를 말한 캐릭터 이름",
+  "quote": "영어 원문 대사 (1~2문장)",
+  "quote_kor": "한국어 번역",
+  "why_famous": "이 대사가 유명한 이유, 영화 맥락 (2~3문장, 한국어)",
+  "vocab": [{"word":"핵심단어","mean":"뜻","tip":"초보자 설명"}],
+  "grammar": {"title":"이 대사의 핵심 문법 포인트","desc":"초보자도 이해하는 쉬운 설명. 패턴 공식 포함."},
+  "similar": [{"eng":"비슷한 맥락의 일상 표현","kor":"뜻"}]
+}
+vocab은 대사 속 핵심 단어 2~3개. similar는 일상에서 쓸 수 있는 표현 2개.
+`;
+
+  try {
+    const res = await callGemini(prompt);
+    renderMovieQuote(res);
+  } catch(e) {
+    document.getElementById('movieResult').innerHTML = `<div class="empty-state"><div class="empty-icon">😅</div><div class="empty-text">대사를 불러오지 못했어요.<br>다시 시도해보세요.</div></div>`;
+  } finally {
+    setLoading('movie', false);
+  }
+}
+
+function renderMovieQuote(res) {
+  const safeLine = encodeURIComponent(res.quote || '');
+
+  let vocabHTML = '';
+  (res.vocab || []).forEach(v => {
+    vocabHTML += `<div class="snap-word-row" onclick="speakText('${(v.word||'').replace(/'/g,"\\'")}', 0.9)">
+      <div>
+        <span class="snap-word-eng">${v.word}</span>
+        <div class="snap-word-kor">${v.mean}</div>
+        ${v.tip ? `<div style="font-size:11px; color:var(--text-muted); margin-top:2px;">${v.tip}</div>` : ''}
+      </div>
+      <span class="snap-speak">🔊</span>
+    </div>`;
+  });
+
+  let similarHTML = '';
+  (res.similar || []).forEach(s => {
+    similarHTML += `<div class="example-row" onclick="speakText('${(s.eng||'').replace(/'/g,"\\'")}', 0.9)">
+      <div class="example-eng"><span class="speak-icon">🔊</span>${s.eng}</div>
+      <div class="example-kor">${s.kor}</div>
+    </div>`;
+  });
+
+  const html = `
+    <div class="card" style="border-top:3px solid var(--accent3);">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:14px;">
+        <span style="font-size:24px;">🎬</span>
+        <div>
+          <div style="font-size:16px; font-weight:700; color:var(--text);">${res.movie || ''}</div>
+          <div style="font-size:12px; color:var(--text-muted);">${res.year || ''} · ${res.character || ''}</div>
+        </div>
+      </div>
+      <div style="background:var(--surface2); border-radius:14px; padding:18px; margin-bottom:14px; border-left:4px solid var(--accent3); cursor:pointer;"
+           onclick="speakText(decodeURIComponent('${safeLine}'), 0.8)">
+        <div style="font-family:'DM Serif Display',serif; font-size:20px; line-height:1.5; color:var(--text); margin-bottom:10px;">"${res.quote || ''}" 🔊</div>
+        <div style="font-size:14px; color:var(--text-muted); line-height:1.6;">${res.quote_kor || ''}</div>
+      </div>
+      <div class="speed-row">
+        <button class="btn-ghost" onclick="speakText(decodeURIComponent('${safeLine}'), 0.5)">x0.5</button>
+        <button class="btn-ghost" onclick="speakText(decodeURIComponent('${safeLine}'), 0.8)">x0.8</button>
+        <button class="btn-ghost" onclick="speakText(decodeURIComponent('${safeLine}'), 1.0)">x1.0</button>
+        <button class="btn-ghost" onclick="speakText(decodeURIComponent('${safeLine}'), 1.2)">x1.2</button>
+      </div>
+    </div>
+
+    ${res.why_famous ? `<div class="card card-accent-gold">
+      <div class="section-label">이 대사가 유명한 이유</div>
+      <div style="font-size:13px; color:#ccc; line-height:1.7;">${res.why_famous}</div>
+    </div>` : ''}
+
+    ${vocabHTML ? `<div class="card card-accent-green">
+      <div class="section-label">핵심 단어</div>
+      ${vocabHTML}
+    </div>` : ''}
+
+    ${res.grammar ? `<div class="guide-card" style="margin-bottom:14px;">
+      <div class="guide-title">📍 ${res.grammar.title}</div>
+      <div class="guide-desc">${res.grammar.desc}</div>
+    </div>` : ''}
+
+    ${similarHTML ? `<div class="card card-accent-left">
+      <div class="section-label">일상에서 써보기</div>
+      ${similarHTML}
+    </div>` : ''}
+
+    <button class="btn-save" onclick="runMovieQuote()">🎬 다른 대사 보기</button>
+  `;
+
+  document.getElementById('movieResult').innerHTML = html;
+  speakText(res.quote, 0.8);
+  markGoalDone('any');
+}
+
+// ══════════════════════════════════════
+//  LYRICS
+// ══════════════════════════════════════
+async function runLyrics() {
+  const artist = document.getElementById('lyricsArtist').value.trim();
+  if (!artist) { alert("아티스트나 곡명을 입력하세요!"); return; }
+
+  setLoading('lyrics', true);
+  document.getElementById('lyricsResult').innerHTML = '';
+
+  const prompt = `
+영어 가사 학습 선생님. 아티스트/곡: "${artist}"
+아래 JSON만 반환. 다른 텍스트 없이.
+{
+  "artist": "아티스트명",
+  "song": "곡명",
+  "line": "가사 한 줄 (영어 원문, 1~2줄)",
+  "line_kor": "한국어 번역",
+  "context": "이 가사가 노래에서 갖는 의미, 감정 (2문장, 한국어)",
+  "vocab": [{"word":"핵심단어","mean":"뜻","tip":"초보자 설명","pos":"품사"}],
+  "grammar": {"title":"이 가사의 문법 포인트","desc":"초보자 설명. 패턴 포함."},
+  "feel": "이 표현의 감정/뉘앙스 (한국어로 짧게)",
+  "daily": [{"eng":"일상에서 쓸 수 있는 비슷한 표현","kor":"뜻/상황"}]
+}
+vocab은 가사 속 핵심 단어 2~3개. daily는 2개.
+`;
+
+  try {
+    const res = await callGemini(prompt);
+    renderLyrics(res);
+  } catch(e) {
+    document.getElementById('lyricsResult').innerHTML = `<div class="empty-state"><div class="empty-icon">😅</div><div class="empty-text">가사를 불러오지 못했어요.<br>다시 시도해보세요.</div></div>`;
+  } finally {
+    setLoading('lyrics', false);
+  }
+}
+
+function renderLyrics(res) {
+  const safeLine = encodeURIComponent(res.line || '');
+
+  let vocabHTML = '';
+  (res.vocab || []).forEach(v => {
+    vocabHTML += `<div class="snap-word-row" onclick="speakText('${(v.word||'').replace(/'/g,"\\'")}', 0.9)">
+      <div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span class="snap-word-eng">${v.word}</span>
+          ${v.pos ? `<span style="font-size:10px; color:var(--gold); background:rgba(245,200,66,0.15); padding:2px 6px; border-radius:4px;">${v.pos}</span>` : ''}
+        </div>
+        <div class="snap-word-kor">${v.mean}</div>
+        ${v.tip ? `<div style="font-size:11px; color:var(--text-muted); margin-top:2px;">${v.tip}</div>` : ''}
+      </div>
+      <span class="snap-speak">🔊</span>
+    </div>`;
+  });
+
+  let dailyHTML = '';
+  (res.daily || []).forEach(d => {
+    dailyHTML += `<div class="example-row" onclick="speakText('${(d.eng||'').replace(/'/g,"\\'")}', 0.9)">
+      <div class="example-eng"><span class="speak-icon">🔊</span>${d.eng}</div>
+      <div class="example-kor">${d.kor}</div>
+    </div>`;
+  });
+
+  const html = `
+    <div class="card" style="border-top:3px solid var(--accent2);">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:14px;">
+        <span style="font-size:24px;">🎵</span>
+        <div>
+          <div style="font-size:16px; font-weight:700; color:var(--text);">${res.song || ''}</div>
+          <div style="font-size:12px; color:var(--text-muted);">${res.artist || ''}</div>
+        </div>
+      </div>
+      <div style="background:var(--surface2); border-radius:14px; padding:18px; margin-bottom:14px; border-left:4px solid var(--accent2); cursor:pointer;"
+           onclick="speakText(decodeURIComponent('${safeLine}'), 0.8)">
+        <div style="font-family:'DM Serif Display',serif; font-size:20px; line-height:1.5; color:var(--accent2); margin-bottom:10px; font-style:italic;">"${res.line || ''}" 🔊</div>
+        <div style="font-size:14px; color:var(--text-muted); line-height:1.6;">${res.line_kor || ''}</div>
+      </div>
+      <div class="speed-row">
+        <button class="btn-ghost" onclick="speakText(decodeURIComponent('${safeLine}'), 0.5)">x0.5</button>
+        <button class="btn-ghost" onclick="speakText(decodeURIComponent('${safeLine}'), 0.8)">x0.8</button>
+        <button class="btn-ghost" onclick="speakText(decodeURIComponent('${safeLine}'), 1.0)">x1.0</button>
+      </div>
+      ${res.feel ? `<div style="margin-top:12px; font-size:12px; color:var(--accent2); background:rgba(78,205,196,0.1); padding:8px 12px; border-radius:8px;">💭 ${res.feel}</div>` : ''}
+    </div>
+
+    ${res.context ? `<div class="card card-accent-gold">
+      <div class="section-label">이 가사의 의미</div>
+      <div style="font-size:13px; color:#ccc; line-height:1.7;">${res.context}</div>
+    </div>` : ''}
+
+    ${vocabHTML ? `<div class="card card-accent-green">
+      <div class="section-label">핵심 단어</div>
+      ${vocabHTML}
+    </div>` : ''}
+
+    ${res.grammar ? `<div class="guide-card" style="margin-bottom:14px;">
+      <div class="guide-title">📍 ${res.grammar.title}</div>
+      <div class="guide-desc">${res.grammar.desc}</div>
+    </div>` : ''}
+
+    ${dailyHTML ? `<div class="card card-accent-left">
+      <div class="section-label">일상에서 써보기</div>
+      ${dailyHTML}
+    </div>` : ''}
+
+    <button class="btn-save" onclick="runLyrics()">🎵 같은 아티스트 다른 가사 보기</button>
+  `;
+
+  document.getElementById('lyricsResult').innerHTML = html;
+  speakText(res.line, 0.8);
+  markGoalDone('any');
+}
+</script>
+</body>
+</html>
