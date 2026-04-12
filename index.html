@@ -1042,9 +1042,76 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
 .bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s; }
 .bar-val { font-size: 12px; font-weight: 700; color: var(--text); width: 28px; text-align: right; }
 
+/* ── 감정 이모지 ── */
+.mood-btn {
+  flex: 1;
+  background: var(--surface2);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 8px 4px;
+  cursor: pointer;
+  font-size: 22px;
+  text-align: center;
+  transition: all 0.2s;
+  font-family: inherit;
+  color: var(--text-muted);
+  line-height: 1.2;
+}
+.mood-btn div { font-size: 9px; margin-top: 3px; font-weight: 600; }
+.mood-btn.active {
+  border-color: var(--accent2);
+  background: rgba(78,205,196,0.1);
+  color: var(--text);
+}
 </style>
 </head>
 <body>
+
+<!-- ── API KEY MODAL ── -->
+<div id="apiKeyModal" style="
+  display:none; position:fixed; inset:0; z-index:9999;
+  background:rgba(0,0,0,0.85); backdrop-filter:blur(8px);
+  align-items:center; justify-content:center; padding:20px;
+">
+  <div style="
+    background:#1a1730; border:1px solid rgba(124,111,247,0.4);
+    border-radius:24px; padding:28px 24px; width:100%; max-width:380px;
+  ">
+    <div style="text-align:center; margin-bottom:20px;">
+      <div style="font-size:40px; margin-bottom:10px;">🔑</div>
+      <div style="font-size:20px; font-weight:700; color:#fff; margin-bottom:8px;">Gemini API 키 입력</div>
+      <div style="font-size:13px; color:rgba(255,255,255,0.5); line-height:1.6;">
+        Google AI Studio에서 발급받은 API 키를 입력해주세요.<br>
+        <span style="color:rgba(78,205,196,0.8);">키는 이 기기에만 저장되고 외부로 전송되지 않아요.</span>
+      </div>
+    </div>
+    <input type="password" id="apiKeyInput" placeholder="AIza..."
+      style="width:100%; padding:14px 16px; background:#0f0d1a;
+        border:1px solid rgba(124,111,247,0.3); border-radius:12px;
+        color:#fff; font-size:14px; font-family:monospace;
+        outline:none; margin-bottom:10px; box-sizing:border-box;"
+      onkeydown="if(event.key==='Enter') saveApiKey()">
+    <div style="display:flex; gap:8px; margin-bottom:14px;">
+      <button onclick="toggleApiKeyVisibility()" style="
+        flex:0 0 auto; padding:10px 14px; background:rgba(255,255,255,0.05);
+        border:1px solid rgba(255,255,255,0.1); border-radius:10px;
+        color:rgba(255,255,255,0.6); font-size:12px; cursor:pointer; font-family:inherit;">
+        👁 보기
+      </button>
+      <button onclick="saveApiKey()" style="
+        flex:1; padding:12px; background:linear-gradient(135deg,#7c6ff7,#4ecdc4);
+        border:none; border-radius:12px; color:#fff; font-size:15px;
+        font-weight:700; cursor:pointer; font-family:inherit;">
+        저장하고 시작하기
+      </button>
+    </div>
+    <div id="apiKeyError" style="color:#ff6b9d; font-size:12px; text-align:center; min-height:18px; margin-bottom:8px;"></div>
+    <div style="text-align:center; font-size:11px; color:rgba(255,255,255,0.3);">
+      키 발급: <a href="https://aistudio.google.com/app/apikey" target="_blank"
+        style="color:rgba(124,111,247,0.8);">aistudio.google.com</a>
+    </div>
+  </div>
+</div>
 
 <!-- SIDEBAR OVERLAY -->
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
@@ -1102,9 +1169,12 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
   <div class="app-header">
     <button class="header-btn" onclick="openSidebar()">☰</button>
     <div class="app-logo">SNOW Tutor</div>
-    <button class="header-btn" onclick="openSidebar()" style="font-size:12px; font-weight:700; color:var(--accent);">
-      <span id="headerSaveCount">0</span>개
-    </button>
+    <div style="display:flex; align-items:center; gap:6px;">
+      <button class="header-btn" onclick="openApiKeyModal()" title="API 키 변경" style="font-size:16px;">🔑</button>
+      <button class="header-btn" onclick="openSidebar()" style="font-size:12px; font-weight:700; color:var(--accent);">
+        <span id="headerSaveCount">0</span>개
+      </button>
+    </div>
   </div>
 
 
@@ -1303,13 +1373,26 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
 
     <!-- ─── TAB: DIARY ─── -->
     <div class="tab-panel" id="tab-diary">
+      <!-- 감정 선택 -->
+      <div class="card" style="margin-bottom:12px;">
+        <div class="section-label">오늘 기분이 어때요?</div>
+        <div style="display:flex; justify-content:space-between; margin-top:10px;" id="moodSelector">
+          <button class="mood-btn active" data-mood="happy" data-eng="happy" onclick="selectMood(this)">😊<div>행복</div></button>
+          <button class="mood-btn" data-mood="excited" data-eng="excited" onclick="selectMood(this)">🤩<div>신남</div></button>
+          <button class="mood-btn" data-mood="calm" data-eng="calm" onclick="selectMood(this)">😌<div>평온</div></button>
+          <button class="mood-btn" data-mood="tired" data-eng="tired" onclick="selectMood(this)">😴<div>피곤</div></button>
+          <button class="mood-btn" data-mood="sad" data-eng="sad" onclick="selectMood(this)">😢<div>슬픔</div></button>
+          <button class="mood-btn" data-mood="angry" data-eng="angry" onclick="selectMood(this)">😤<div>짜증</div></button>
+        </div>
+        <div id="moodEngBox" style="margin-top:10px; padding:10px 12px; background:var(--surface2); border-radius:10px; font-size:13px; color:var(--accent2); display:none;">
+          💬 <span id="moodEngText"></span>
+        </div>
+      </div>
       <p class="input-hint">💡 한글 또는 영어로 자유롭게 적어보세요</p>
       <textarea class="input-field" id="diaryInput" placeholder="오늘 하루를 짧게 일기처럼 적어보세요...&#10;예) 오늘 날씨가 너무 좋아서 친구랑 공원에 갔어."></textarea>
       <button class="btn-green" onclick="runDiary()">✍️ AI 선생님께 일기 검사받기</button>
-
       <div class="loading-bar" id="diaryLoadBar"></div>
       <div class="loading-text" id="diaryLoadText">📝 일기를 분석하고 있어요...</div>
-
       <div id="diaryResult" style="display:none;"></div>
     </div>
 
@@ -1321,11 +1404,29 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
       </div>
       <input type="file" id="snapFile" accept="image/*" style="display:none" onchange="onSnapFile(event)">
       <button class="btn-primary" id="snapBtn" onclick="runSnap()" style="display:none;">📸 사진 속 영어 분석하기</button>
-
       <div class="loading-bar" id="snapLoadBar"></div>
       <div class="loading-text" id="snapLoadText">🔍 사진 속 단어를 찾고 있어요...</div>
-
       <div id="snapResult" style="display:none;"></div>
+
+      <!-- 문장 써보기 영역 (분석 후 표시) -->
+      <div id="snapWriteArea" style="display:none;">
+        <div class="card" style="margin-top:14px; border-top:3px solid var(--accent2);">
+          <div class="section-label">✏️ 이 사진으로 영어 문장 써보기</div>
+          <p style="font-size:13px; color:var(--text-muted); margin-bottom:10px; line-height:1.6;">
+            위에서 배운 단어를 써서 짧은 영어 문장을 만들어보세요!<br>
+            <span style="color:var(--accent2);">틀려도 괜찮아요 — AI가 교정해줘요 😊</span>
+          </p>
+          <div style="position:relative;">
+            <input type="text" class="input-field" id="snapWriteInput"
+              placeholder="예: I see a coffee cup on the desk."
+              style="padding-right:50px;">
+            <button onclick="runSnapWrite()" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:var(--accent2);border:none;border-radius:8px;padding:6px 10px;color:#000;font-weight:700;cursor:pointer;font-size:13px;">→</button>
+          </div>
+          <div class="loading-bar" id="snapWriteLoadBar"></div>
+          <div class="loading-text" id="snapWriteLoadText">✏️ 문장을 분석하고 있어요...</div>
+          <div id="snapWriteResult"></div>
+        </div>
+      </div>
     </div>
 
     <!-- ─── TAB: WORDS ─── -->
@@ -1544,7 +1645,7 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
 // ══════════════════════════════════════
 //  CONFIG  (API 키를 여기에 입력하세요)
 // ══════════════════════════════════════
-const API_KEY = "AIzaSyCoaWLFf7-uhlC2WhWR1xDLi1DaoKVWWTE";
+let API_KEY = localStorage.getItem('snowTutorApiKey') || '';
 const MODEL  = "gemini-3-flash-preview"; // ✅ 올바른 모델명 유지
 
 // ══════════════════════════════════════
@@ -1581,6 +1682,10 @@ let learningLog = JSON.parse(localStorage.getItem('learningLog') || '{}');
 //  GEMINI API
 // ══════════════════════════════════════
 async function callGemini(prompt, imageData = null) {
+  if (!API_KEY) {
+    openApiKeyModal();
+    throw new Error('NO_KEY');
+  }
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${API_KEY}`;
   const parts = [];
   if (imageData) {
@@ -1588,18 +1693,50 @@ async function callGemini(prompt, imageData = null) {
   }
   parts.push({ text: prompt });
   const body = { contents: [{ parts }] };
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  });
+
+  let res;
+  try {
+    res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+  } catch(e) {
+    throw new Error('NETWORK');
+  }
+
   const data = await res.json();
-  if (!data.candidates || !data.candidates[0]) throw new Error("No response");
+
+  // API 오류 상세 처리
+  if (data.error) {
+    const code = data.error.code;
+    const msg = data.error.message || '';
+    if (code === 429 || msg.includes('quota') || msg.includes('RATE_LIMIT')) throw new Error('RATE_LIMIT');
+    if (code === 400) throw new Error('BAD_REQUEST');
+    if (code === 403) throw new Error('API_KEY');
+    throw new Error('API_ERROR: ' + msg);
+  }
+
+  if (!data.candidates || !data.candidates[0]) throw new Error('No response');
   let text = data.candidates[0].content.parts[0].text;
   text = text.replace(/```json|```/g, '').trim();
   const match = text.match(/\{[\s\S]*\}/);
-  if (!match) throw new Error("No JSON found");
+  if (!match) throw new Error('No JSON found');
   return JSON.parse(match[0]);
+}
+
+function getApiErrorMsg(e) {
+  const map = {
+    'NO_KEY':     '🔑 API 키를 먼저 입력해주세요.',
+    'RATE_LIMIT': '⏳ API 사용 한도를 잠깐 초과했어요.\n1~2분 후 다시 시도해보세요.',
+    'API_KEY':    '🔑 API 키가 잘못됐어요.\nAPI 키를 다시 확인해주세요.',
+    'NETWORK':    '🌐 인터넷 연결을 확인해주세요.',
+    'BAD_REQUEST':'⚠️ 요청 형식 오류예요. 다시 시도해보세요.',
+  };
+  for (const [k, v] of Object.entries(map)) {
+    if (e.message && e.message.includes(k)) return v;
+  }
+  return '❌ 오류가 발생했어요. 잠시 후 다시 시도해보세요.';
 }
 
 // ══════════════════════════════════════
@@ -1663,7 +1800,7 @@ quiz는 방금 배운 문법/단어를 활용한 문제.
     const res = await callGemini(prompt);
     renderTranslate(res);
   } catch(e) {
-    alert("오류가 발생했어요. 다시 시도해주세요.\n(" + e.message + ")");
+    alert(getApiErrorMsg(e));
   } finally {
     setLoading('trans', false);
   }
@@ -1842,7 +1979,7 @@ today_vocab은 일기에서 나온 중요 단어 4~5개.
     const res = await callGemini(prompt);
     renderDiary(res);
   } catch(e) {
-    alert("오류가 발생했어요. 다시 시도해주세요.");
+    alert(getApiErrorMsg(e));
   } finally {
     setLoading('diary', false);
   }
@@ -1981,7 +2118,7 @@ grammar_tips는 이 사진의 문장들에서 배울 수 있는 초보자용 문
     const res = await callGemini(prompt, { mime: snapMimeType, b64: snapBase64 });
     renderSnap(res);
   } catch(e) {
-    alert("사진 분석에 실패했어요. 다시 시도해주세요.");
+    alert(getApiErrorMsg(e));
   } finally {
     setLoading('snap', false);
   }
@@ -2040,6 +2177,16 @@ function renderSnap(res) {
 
   document.getElementById('snapResult').innerHTML = html;
   document.getElementById('snapResult').style.display = 'block';
+
+  // 문장 써보기 영역 활성화
+  const words = (res.words || []).map(w => w.word || w).join(', ');
+  snapContext = `사진에서 발견된 단어들: ${words}`;
+  const writeArea = document.getElementById('snapWriteArea');
+  if (writeArea) {
+    writeArea.style.display = 'block';
+    document.getElementById('snapWriteInput').value = '';
+    document.getElementById('snapWriteResult').innerHTML = '';
+  }
 }
 
 // ══════════════════════════════════════
@@ -2087,7 +2234,7 @@ async function getNextWord() {
     localStorage.setItem('seenWords', JSON.stringify(seenWords));
     renderWord(res);
   } catch(e) {
-    document.getElementById('wordDisplay').innerHTML = `<div class="empty-state"><div class="empty-icon">😅</div><div class="empty-text">단어를 불러오지 못했어요.<br>다시 시도해보세요.</div></div>`;
+    document.getElementById('wordDisplay').innerHTML = `<div class="empty-state"><div class="empty-icon">😅</div><div class="empty-text">${getApiErrorMsg(e)}</div></div>`;
   } finally {
     setLoading('word', false);
   }
@@ -2469,6 +2616,155 @@ initNavDrag();
 renderReview();
 renderStats();
 
+// API 키 없으면 모달 자동 표시
+if (!API_KEY) {
+  setTimeout(() => openApiKeyModal(), 500);
+}
+
+// ══════════════════════════════════════
+//  API KEY MODAL
+// ══════════════════════════════════════
+function openApiKeyModal() {
+  const modal = document.getElementById('apiKeyModal');
+  modal.style.display = 'flex';
+  const input = document.getElementById('apiKeyInput');
+  input.value = API_KEY ? '●'.repeat(20) : '';
+  input.type = 'password';
+  document.getElementById('apiKeyError').textContent = '';
+  setTimeout(() => input.focus(), 100);
+}
+
+function closeApiKeyModal() {
+  document.getElementById('apiKeyModal').style.display = 'none';
+}
+
+function toggleApiKeyVisibility() {
+  const input = document.getElementById('apiKeyInput');
+  input.type = input.type === 'password' ? 'text' : 'password';
+}
+
+function saveApiKey() {
+  const input = document.getElementById('apiKeyInput');
+  const val = input.value.trim();
+  const errEl = document.getElementById('apiKeyError');
+
+  if (!val || val === '●'.repeat(20)) {
+    errEl.textContent = 'API 키를 입력해주세요.';
+    return;
+  }
+  if (!val.startsWith('AIza') || val.length < 30) {
+    errEl.textContent = '올바른 API 키 형식이 아니에요. (AIza... 로 시작해야 해요)';
+    return;
+  }
+
+  API_KEY = val;
+  localStorage.setItem('snowTutorApiKey', val);
+  closeApiKeyModal();
+  showToast('🔑 API 키가 저장됐어요!');
+}
+
+// ══════════════════════════════════════
+//  MOOD (감정 이모지)
+// ══════════════════════════════════════
+let currentMood = 'happy';
+const moodExpressions = {
+  happy:   ["I'm in a great mood today!", "I feel so happy today!", "Today is a wonderful day!"],
+  excited: ["I'm so excited!", "I can't wait!", "This is thrilling!"],
+  calm:    ["I feel calm and relaxed.", "I'm at peace today.", "Everything feels fine."],
+  tired:   ["I'm so tired today.", "I need some rest.", "I feel exhausted."],
+  sad:     ["I feel a bit down today.", "I'm feeling sad.", "It's been a tough day."],
+  angry:   ["I'm feeling frustrated.", "I'm a bit upset today.", "I need to calm down."],
+};
+
+function selectMood(btn) {
+  document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentMood = btn.dataset.mood;
+  const exprs = moodExpressions[currentMood] || [];
+  const pick = exprs[Math.floor(Math.random() * exprs.length)] || '';
+  const box = document.getElementById('moodEngBox');
+  const txt = document.getElementById('moodEngText');
+  if (pick) {
+    txt.textContent = pick;
+    box.style.display = 'block';
+    speakText(pick, 0.9);
+  }
+}
+
+// ══════════════════════════════════════
+//  SNAP WRITE (찰칵 문장 써보기)
+// ══════════════════════════════════════
+let snapContext = ''; // 현재 사진 분석 결과 컨텍스트
+
+async function runSnapWrite() {
+  const input = document.getElementById('snapWriteInput').value.trim();
+  if (!input) { showToast('영어 문장을 입력해보세요!'); return; }
+
+  setLoading('snapWrite', true);
+  document.getElementById('snapWriteResult').innerHTML = '';
+
+  const prompt = `
+영어 초보자 교정 선생님.
+사진 컨텍스트: "${snapContext}"
+학생이 쓴 문장: "${input}"
+
+아래 JSON만 반환. 다른 텍스트 없이.
+{
+  "original": "${input}",
+  "corrected": "교정된 영어 문장",
+  "is_correct": true 또는 false,
+  "feedback": "틀린 부분 설명 또는 잘 썼다는 칭찬 (한국어, 2~3문장, 따뜻하게)",
+  "points": [{"wrong":"틀린 부분","right":"올바른 표현","why":"이유 (한국어, 초보자 눈높이)"}],
+  "better": "더 자연스러운 표현이 있다면 (없으면 빈 문자열)",
+  "encouragement": "초보자에게 힘이 되는 한 마디 (한국어)"
+}
+points는 실제 오류가 있을 때만. 맞으면 빈 배열.
+`;
+
+  try {
+    const res = await callGemini(prompt);
+    renderSnapWrite(res);
+    markGoalDone('translate');
+  } catch(e) {
+    document.getElementById('snapWriteResult').innerHTML =
+      `<div style="color:var(--accent3);font-size:13px;padding:10px 0;">${getApiErrorMsg(e)}</div>`;
+  } finally {
+    setLoading('snapWrite', false);
+  }
+}
+
+function renderSnapWrite(res) {
+  const safeEng = encodeURIComponent(res.corrected || '');
+  let pointsHTML = '';
+  (res.points || []).forEach(p => {
+    pointsHTML += `<div style="padding:8px 0; border-bottom:1px solid var(--border);">
+      <div style="display:flex; gap:8px; align-items:center; margin-bottom:4px;">
+        <span style="color:var(--accent3); text-decoration:line-through; font-size:13px;">${p.wrong}</span>
+        <span style="color:var(--text-muted);">→</span>
+        <span style="color:var(--green); font-weight:700; font-size:13px;">${p.right}</span>
+      </div>
+      <div style="font-size:12px; color:var(--text-muted);">${p.why}</div>
+    </div>`;
+  });
+
+  const html = `
+    <div style="margin-top:12px;">
+      ${res.is_correct
+        ? `<div style="padding:10px 12px; background:rgba(86,211,100,0.1); border:1px solid var(--green); border-radius:10px; font-size:13px; color:var(--green); font-weight:600; margin-bottom:10px;">✅ 정확한 문장이에요!</div>`
+        : `<div style="padding:10px 12px; background:rgba(124,111,247,0.1); border:1px solid var(--accent); border-radius:10px; margin-bottom:10px;">
+            <div style="font-size:11px; color:var(--text-muted); margin-bottom:4px;">교정된 문장</div>
+            <div style="font-size:16px; font-weight:700; color:var(--text); cursor:pointer;" onclick="speakText(decodeURIComponent('${safeEng}'), 0.9)">${res.corrected} 🔊</div>
+          </div>`
+      }
+      <div style="font-size:13px; color:var(--text-muted); line-height:1.7; margin-bottom:10px;">${res.feedback}</div>
+      ${pointsHTML ? `<div style="margin-bottom:10px;">${pointsHTML}</div>` : ''}
+      ${res.better ? `<div style="padding:8px 12px; background:rgba(78,205,196,0.1); border-radius:8px; font-size:13px; color:var(--accent2); margin-bottom:10px;">💬 더 자연스럽게: <strong>${res.better}</strong></div>` : ''}
+      <div style="font-size:13px; color:var(--gold); text-align:center; padding:8px; font-weight:600;">✨ ${res.encouragement}</div>
+    </div>
+  `;
+  document.getElementById('snapWriteResult').innerHTML = html;
+}
+
 // ══════════════════════════════════════
 //  NAV DRAG SCROLL
 // ══════════════════════════════════════
@@ -2539,6 +2835,7 @@ function startRecording() {
   isRecording = true;
 
   let finalTranscript = '';
+  let finalConfidence = 1.0;
 
   recog.onstart = () => {
     box.textContent = '🎤 듣고 있어요... 지금 말해보세요!';
@@ -2547,9 +2844,11 @@ function startRecording() {
   recog.onresult = e => {
     let interim = '';
     finalTranscript = '';
+    finalConfidence = 1.0;
     for (let i = 0; i < e.results.length; i++) {
       if (e.results[i].isFinal) {
         finalTranscript += e.results[i][0].transcript;
+        finalConfidence = Math.min(finalConfidence, e.results[i][0].confidence || 1.0);
       } else {
         interim += e.results[i][0].transcript;
       }
@@ -2563,7 +2862,7 @@ function startRecording() {
     btn.classList.remove('recording');
     const result = finalTranscript || box.textContent;
     if (result && result !== '🎤 듣고 있어요... 지금 말해보세요!' && result !== '...') {
-      scorePronunciation(currentEngSentence, result);
+      scorePronunciation(currentEngSentence, result, finalConfidence);
     } else {
       box.textContent = '아무 소리도 인식되지 않았어요. 다시 눌러서 말해보세요!';
     }
@@ -2598,34 +2897,56 @@ function stopRecording() {
   if (recog) recog.stop();
 }
 
-function scorePronunciation(original, spoken) {
+function scorePronunciation(original, spoken, confidence = 1.0) {
   const normalize = s => s.toLowerCase().replace(/[.,!?;:'"]/g, '').trim();
-  const origWords = normalize(original).split(/\s+/);
+  const origWords  = normalize(original).split(/\s+/);
   const spokenWords = normalize(spoken).split(/\s+/);
 
-  let matched = 0;
-  const usedIdx = new Set();
+  // 순서 기반 매칭 (순서 어긋나면 부분 점수)
+  let orderScore = 0;
+  let spokenPtr = 0;
   const resultWords = origWords.map(ow => {
-    const idx = spokenWords.findIndex((sw, i) => !usedIdx.has(i) && sw === ow);
-    if (idx !== -1) { usedIdx.add(idx); matched++; return `<span class="diff-match">${ow}</span>`; }
+    // 현재 위치부터 순서대로 찾기
+    const idx = spokenWords.findIndex((sw, i) => i >= spokenPtr && sw === ow);
+    if (idx !== -1) {
+      spokenPtr = idx + 1;
+      orderScore++;
+      return `<span class="diff-match">${ow}</span>`;
+    }
+    // 순서 무시하고 어디든 있으면 절반 점수
+    const anyIdx = spokenWords.findIndex(sw => sw === ow);
+    if (anyIdx !== -1) {
+      orderScore += 0.5;
+      return `<span class="diff-extra">${ow}</span>`;
+    }
     return `<span class="diff-miss">${ow}</span>`;
   });
 
-  const score = Math.round((matched / origWords.length) * 100);
-  const color = score >= 80 ? 'var(--green)' : score >= 50 ? 'var(--gold)' : 'var(--accent3)';
-  const comments = {
-    100: '🏆 완벽해요! 발음이 정확해요!',
-    80:  '🎉 아주 잘했어요! 거의 완벽!',
-    60:  '👍 잘하고 있어요! 조금 더 연습해봐요.',
-    40:  '💪 괜찮아요! 천천히 다시 해봐요.',
-    0:   '😊 처음엔 다 어려워요. 한 단어씩 해봐요!'
-  };
-  const commentKey = [100,80,60,40,0].find(k => score >= k);
+  // 기본 점수 = 순서 점수 비율
+  const baseScore = orderScore / origWords.length;
+
+  // confidence 반영 (confidence 낮으면 최대 20% 감점)
+  const confPenalty = confidence < 0.8 ? (0.8 - confidence) * 0.5 : 0;
+
+  // 최종 점수
+  const score = Math.max(0, Math.round((baseScore - confPenalty) * 100));
+  const color = score >= 85 ? 'var(--green)' : score >= 65 ? 'var(--accent2)' : score >= 45 ? 'var(--gold)' : 'var(--accent3)';
+
+  const comments = [
+    [90, '🏆 완벽해요! 정말 잘하고 있어요!'],
+    [75, '🎉 아주 잘했어요! 조금만 더 다듬으면 완벽!'],
+    [60, '👍 잘하고 있어요! 표시된 단어를 다시 연습해봐요.'],
+    [40, '💪 괜찮아요! 천천히 한 단어씩 따라해봐요.'],
+    [0,  '😊 처음엔 다 어려워요. x0.5 속도로 먼저 들어봐요!'],
+  ];
+  const comment = (comments.find(([min]) => score >= min) || comments[4])[1];
+
+  const confText = confidence < 0.6 ? ` (인식 신뢰도: ${Math.round(confidence*100)}% — 발음을 더 또렷하게 해보세요)` : '';
 
   document.getElementById('transcriptBox').innerHTML =
     `<div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">내가 말한 것:</div>` +
     `<div style="color:var(--text);margin-bottom:8px;">${spoken}</div>` +
-    `<div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">원문 대조:</div>` +
+    `<div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">원문 대조 <span style="font-size:10px;">(🟢맞음 🟡순서오류 🔴누락)</span>:</div>` +
     resultWords.join(' ');
 
   const scoreArea = document.getElementById('scoreArea');
@@ -2634,7 +2955,7 @@ function scorePronunciation(original, spoken) {
   document.getElementById('scoreBarFill').style.background = `linear-gradient(90deg, ${color}, ${color})`;
   document.getElementById('scoreNum').style.color = color;
   document.getElementById('scoreNum').textContent = score + '%';
-  document.getElementById('scoreComment').textContent = comments[commentKey];
+  document.getElementById('scoreComment').textContent = comment + confText;
 }
 
 // ══════════════════════════════════════
@@ -2833,7 +3154,7 @@ vocab은 대사 속 핵심 단어 2~3개. similar는 일상에서 쓸 수 있는
     const res = await callGemini(prompt);
     renderMovieQuote(res);
   } catch(e) {
-    document.getElementById('movieResult').innerHTML = `<div class="empty-state"><div class="empty-icon">😅</div><div class="empty-text">대사를 불러오지 못했어요.<br>다시 시도해보세요.</div></div>`;
+    document.getElementById('movieResult').innerHTML = `<div class="empty-state"><div class="empty-icon">😅</div><div class="empty-text">${getApiErrorMsg(e)}</div></div>`;
   } finally {
     setLoading('movie', false);
   }
@@ -2943,7 +3264,7 @@ vocab은 가사 속 핵심 단어 2~3개. daily는 2개.
     const res = await callGemini(prompt);
     renderLyrics(res);
   } catch(e) {
-    document.getElementById('lyricsResult').innerHTML = `<div class="empty-state"><div class="empty-icon">😅</div><div class="empty-text">가사를 불러오지 못했어요.<br>다시 시도해보세요.</div></div>`;
+    document.getElementById('lyricsResult').innerHTML = `<div class="empty-state"><div class="empty-icon">😅</div><div class="empty-text">${getApiErrorMsg(e)}</div></div>`;
   } finally {
     setLoading('lyrics', false);
   }
