@@ -1339,10 +1339,14 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
           </button>
         </div>
 
-        <!-- STEP 3: 문법 가이드 -->
+        <!-- STEP 3: 문법 가이드 + 실수방지 -->
         <div class="step-block" id="stepBlock3">
           <div class="section-head">③ 문법 포인트 — 이게 핵심이에요</div>
           <div id="guidesArea"></div>
+
+          <!-- 초보 실수 방지 -->
+          <div id="mistakesArea"></div>
+
           <button class="reveal-btn" id="revealBtn4" onclick="revealStep(4)">
             📝 예문으로 연습하기 →
           </button>
@@ -1355,17 +1359,33 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
             <div id="samplesArea"></div>
           </div>
           <button class="reveal-btn" id="revealBtn5" onclick="revealStep(5)">
+            🎭 실제 대화에서 써보기 →
+          </button>
+        </div>
+
+        <!-- STEP 5: 상황극 -->
+        <div class="step-block" id="stepBlock5">
+          <div id="roleplayArea"></div>
+          <button class="reveal-btn" id="revealBtn6" onclick="revealStep(6)">
             ⚡ 퀴즈로 확인하기 →
           </button>
         </div>
 
-        <!-- STEP 5: 퀴즈 -->
-        <div class="step-block" id="stepBlock5">
+        <!-- STEP 6: 퀴즈 -->
+        <div class="step-block" id="stepBlock6">
           <div class="card" id="quizCard">
-            <div class="section-label">⑤ 방금 배운 것 퀴즈로 확인!</div>
+            <div class="section-label">⑥ 방금 배운 것 퀴즈로 확인!</div>
             <div id="quizArea"></div>
           </div>
+          <button class="reveal-btn" id="revealBtn7" onclick="revealStep(7)" style="border-color:rgba(245,200,66,0.4); color:var(--gold);">
+            🚀 확장 훈련 더 해보기 (선택)
+          </button>
           <button class="btn-save" onclick="saveSentence()" style="margin-top:8px;">⭐ 이 문장 보관함에 저장</button>
+        </div>
+
+        <!-- STEP 7: 확장훈련 (선택) -->
+        <div class="step-block" id="stepBlock7">
+          <div id="expandArea"></div>
         </div>
 
       </div>
@@ -1787,12 +1807,18 @@ async function runTranslate() {
   "chunks": "단어/뜻/단어/뜻 형식으로 직독직해 (슬래시로 구분)",
   "dictionary": [{"word":"단어","mean":"뜻","tip":"초보자를 위한 상세 설명 (문법용어 한글+영어 병기)","exs":["예문 (해석)"]}],
   "guides": [{"title":"문법 포인트 (영어명)","desc":"초보자도 이해하는 쉬운 설명, 예시 포함"}],
+  "mistakes": [{"wrong":"초보자가 자주 틀리는 잘못된 표현","right":"올바른 표현","why":"왜 틀렸는지 한국어로 짧게"}],
   "samples_basic": ["기본 예문1 (해석)", "기본 예문2 (해석)", "기본 예문3 (해석)"],
   "samples_up": ["심화 예문1 (해석)", "심화 예문2 (해석)"],
+  "roleplay": {"situation":"상황 설명 (한국어, 짧게)","dialogue":[{"speaker":"A","line":"영어 대사","kor":"해석"},{"speaker":"B","line":"입력 문장과 유사한 영어 대사","kor":"해석"}]},
+  "expand": {"past":"과거형 문장","future":"미래형 문장","reason":"이유 추가 문장 (because ~)","negative":"부정형 문장","question":"의문형 문장"},
   "quiz": {"q":"객관식 문제 (한글)", "opts": ["보기1","보기2","보기3","보기4"], "ans": 정답_인덱스_숫자}
 }
-dictionary에는 번역된 영어 문장의 '모든' 단어를 포함할 것.
+dictionary에는 번역된 영어 문장의 모든 단어 포함.
 guides는 초보자에게 꼭 필요한 문법 설명 2~3개.
+mistakes는 이 문장과 관련된 초보자 실수 1~2개.
+roleplay는 배운 문장을 실제 대화에서 쓰는 2줄 상황극.
+expand는 같은 의미를 다양한 시제/형태로 변형한 것.
 quiz는 방금 배운 문법/단어를 활용한 문제.
 `;
 
@@ -1821,10 +1847,10 @@ function renderTranslate(res) {
   currentEngSentence = res.eng;
 
   // 모든 step 블록 초기화
-  for (let i = 2; i <= 5; i++) {
+  for (let i = 2; i <= 7; i++) {
     const b = document.getElementById('stepBlock' + i);
     if (b) b.classList.remove('visible');
-    const btn = document.getElementById('revealBtn' + (i));
+    const btn = document.getElementById('revealBtn' + i);
     if (btn) btn.classList.remove('hidden-btn');
   }
   document.getElementById('stepBlock1').classList.add('visible');
@@ -1911,11 +1937,93 @@ function renderTranslate(res) {
     document.getElementById('quizArea').innerHTML = qHTML;
   }
 
+  // ③-b 초보 실수 방지
+  let mistakesHTML = '';
+  if (res.mistakes && res.mistakes.length > 0) {
+    mistakesHTML = `<div class="card" style="background:rgba(255,107,157,0.05); border:1px solid rgba(255,107,157,0.2); margin-bottom:10px;">
+      <div class="section-label" style="color:var(--accent3);">⚠️ 초보 실수 방지</div>`;
+    res.mistakes.forEach(m => {
+      mistakesHTML += `<div style="padding:10px 0; border-bottom:1px solid rgba(255,107,157,0.1);">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px; flex-wrap:wrap;">
+          <span style="color:var(--accent3); font-size:13px; font-weight:600;">❌ ${m.wrong}</span>
+          <span style="color:var(--text-muted); font-size:12px;">→</span>
+          <span style="color:var(--green); font-size:13px; font-weight:600;">✅ ${m.right}</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-muted); line-height:1.6; padding:6px 8px; background:var(--surface); border-radius:8px;">${m.why}</div>
+      </div>`;
+    });
+    mistakesHTML += `</div>`;
+  }
+  const mistakesEl = document.getElementById('mistakesArea');
+  if (mistakesEl) mistakesEl.innerHTML = mistakesHTML;
+
+  // ⑤ 상황극 (roleplay)
+  let roleHTML = '';
+  if (res.roleplay) {
+    const rp = res.roleplay;
+    roleHTML = `<div class="card" style="border-top:3px solid var(--accent3); margin-bottom:14px;">
+      <div class="section-label">⑤ 실제 대화에서 써보기 🎭</div>
+      <div style="font-size:12px; color:var(--text-muted); margin-bottom:12px; padding:8px 10px; background:rgba(255,107,157,0.08); border-radius:8px;">
+        📍 상황: ${rp.situation || ''}
+      </div>
+      <div style="display:flex; flex-direction:column; gap:10px;">`;
+    (rp.dialogue || []).forEach(line => {
+      const isB = line.speaker === 'B';
+      const safeLine = encodeURIComponent(line.line || '');
+      roleHTML += `<div style="display:flex; flex-direction:column; align-items:${isB ? 'flex-end' : 'flex-start'};">
+        <div style="font-size:10px; color:var(--text-muted); margin-bottom:3px; font-weight:600;">${line.speaker}</div>
+        <div onclick="speakText(decodeURIComponent('${safeLine}'), 0.9)" style="
+          max-width:85%; padding:10px 14px;
+          background:${isB ? 'rgba(124,111,247,0.15)' : 'var(--surface2)'};
+          border:1px solid ${isB ? 'rgba(124,111,247,0.3)' : 'var(--border)'};
+          border-radius:${isB ? '16px 16px 4px 16px' : '16px 16px 16px 4px'};
+          cursor:pointer;">
+          <div style="font-size:14px; font-weight:600; color:var(--text); margin-bottom:3px;">${line.line} 🔊</div>
+          <div style="font-size:11px; color:var(--text-muted);">${line.kor}</div>
+        </div>
+      </div>`;
+    });
+    roleHTML += `</div>
+      <div style="margin-top:12px; font-size:12px; color:var(--accent2); text-align:center; padding:8px; background:rgba(78,205,196,0.08); border-radius:8px;">
+        💬 B 역할로 소리 내서 따라 말해보세요!
+      </div>
+    </div>`;
+  }
+  const roleEl = document.getElementById('roleplayArea');
+  if (roleEl) roleEl.innerHTML = roleHTML;
+
+  // ⑦ 확장 훈련
+  if (res.expand) {
+    const ex = res.expand;
+    const rows = [
+      { label: '⏮ 과거', val: ex.past },
+      { label: '⏭ 미래', val: ex.future },
+      { label: '❓ 이유 추가', val: ex.reason },
+      { label: '🚫 부정형', val: ex.negative },
+      { label: '❔ 의문형', val: ex.question },
+    ];
+    let expandHTML = `<div class="card" style="border-top:3px solid var(--gold); margin-bottom:14px;">
+      <div class="section-label" style="color:var(--gold);">🚀 확장 훈련 — 문장 변형 마스터</div>
+      <div style="font-size:12px; color:var(--text-muted); margin-bottom:14px; line-height:1.6;">같은 의미를 다양하게 표현해봐요. 탭하면 발음을 들을 수 있어요!</div>`;
+    rows.forEach(r => {
+      if (!r.val) return;
+      const safe = encodeURIComponent(r.val);
+      expandHTML += `<div onclick="speakText(decodeURIComponent('${safe}'), 0.9)" style="
+        padding:12px; margin-bottom:8px;
+        background:var(--surface2); border-radius:12px; cursor:pointer;
+        border-left:3px solid var(--gold);">
+        <div style="font-size:10px; color:var(--gold); font-weight:700; margin-bottom:4px;">${r.label}</div>
+        <div style="font-size:15px; font-weight:600; color:var(--text);">${r.val} 🔊</div>
+      </div>`;
+    });
+    expandHTML += `</div>`;
+    const expandEl = document.getElementById('expandArea');
+    if (expandEl) expandEl.innerHTML = expandHTML;
+  }
+
   document.getElementById('transResult').style.display = 'block';
   document.getElementById('mainContent').scrollTop = 0;
   speakText(res.eng, 0.9);
-
-  // 목표 달성 처리
   markGoalDone('translate');
 }
 
