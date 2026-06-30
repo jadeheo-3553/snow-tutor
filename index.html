@@ -12,7 +12,7 @@
   --surface2: #22222f;
   --border: rgba(255,255,255,0.08);
   --text: #f0f0f5;
-  --text-muted: #888899;
+  --text-muted: #b8b8cc;
   --accent: #7c6ff7;
   --accent2: #4ecdc4;
   --accent3: #ff6b9d;
@@ -261,7 +261,7 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
   background: var(--surface2);
   border-radius: 12px;
   padding: 14px;
-  font-size: 14px;
+  font-size: 15px;
   color: var(--text-muted);
   line-height: 1.8;
   margin-top: 14px;
@@ -269,7 +269,7 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
 .chunk-sep { color: var(--accent); margin: 0 4px; }
 
 .section-label {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -285,12 +285,12 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
   border-left: 3px solid var(--accent3);
 }
 .guide-title {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   color: var(--accent3);
   margin-bottom: 6px;
 }
-.guide-desc { font-size: 13px; color: #ccc; line-height: 1.6; }
+.guide-desc { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
 
 .example-row {
   padding: 11px 0;
@@ -298,15 +298,15 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
   cursor: pointer;
 }
 .example-row:last-child { border-bottom: none; }
-.example-eng { font-size: 14px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 6px; }
-.example-kor { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+.example-eng { font-size: 15px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 6px; }
+.example-kor { font-size: 13px; color: var(--text-muted); margin-top: 3px; }
 .speak-icon { font-size: 12px; color: var(--accent2); }
 
 .badge {
   display: inline-block;
   padding: 3px 8px;
   border-radius: 6px;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.5px;
 }
@@ -325,14 +325,37 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
   display: flex; align-items: center; gap: 10px;
 }
 .quiz-option:active { transform: scale(0.99); }
-.quiz-option.correct { border-color: var(--green); background: rgba(86,211,100,0.1); color: var(--green); }
-.quiz-option.wrong { border-color: var(--accent3); background: rgba(255,107,157,0.1); color: var(--accent3); }
+.quiz-option.correct {
+  border-color: var(--green);
+  background: rgba(86,211,100,0.18);
+  color: var(--green);
+  font-weight: 700;
+  transform: scale(1.01);
+}
+.quiz-option.correct::after {
+  content: ' ✅ 정답!';
+  font-size: 13px;
+  font-weight: 700;
+}
+.quiz-option.wrong {
+  border-color: var(--accent3);
+  background: rgba(255,107,157,0.15);
+  color: var(--accent3);
+  text-decoration: line-through;
+  opacity: 0.75;
+}
+.quiz-option.wrong::after {
+  content: ' ❌';
+  font-size: 13px;
+  text-decoration: none;
+  display: inline-block;
+}
 .quiz-option-num {
   width: 24px; height: 24px;
   background: var(--border);
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 700; flex-shrink: 0;
+  font-size: 13px; font-weight: 700; flex-shrink: 0;
 }
 
 /* ── DIARY ── */
@@ -370,7 +393,7 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
 }
 .snap-word-row:last-child { border-bottom: none; }
 .snap-word-eng { font-size: 16px; font-weight: 700; color: var(--text); }
-.snap-word-kor { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+.snap-word-kor { font-size: 14px; color: var(--text-muted); margin-top: 2px; }
 .snap-speak { color: var(--accent2); font-size: 18px; }
 
 /* ── WORDBOOK ── */
@@ -421,7 +444,7 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
   margin-bottom: 10px;
 }
 .step-title {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -577,7 +600,7 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
   text-align: center;
 }
 .stat-num { font-size: 20px; font-weight: 700; color: var(--accent); }
-.stat-label { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+.stat-label { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
 
 /* ── MODAL ── */
 .modal-bg {
@@ -741,7 +764,7 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
   font-family: 'DM Serif Display', serif;
 }
 .streak-label { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
-.streak-best { font-size: 11px; color: rgba(245,200,66,0.6); margin-top: 4px; }
+.streak-best { font-size: 13px; color: rgba(245,200,66,0.6); margin-top: 4px; }
 
 .stats-grid {
   display: grid;
@@ -763,7 +786,7 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
   line-height: 1;
   margin-bottom: 4px;
 }
-.stat-card-label { font-size: 11px; color: var(--text-muted); line-height: 1.3; }
+.stat-card-label { font-size: 13px; color: var(--text-muted); line-height: 1.3; }
 
 .today-goal-card {
   background: var(--surface);
@@ -794,7 +817,7 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
   border-radius: 50%;
   border: 2px solid var(--border);
   display: flex; align-items: center; justify-content: center;
-  font-size: 11px;
+  font-size: 13px;
   flex-shrink: 0;
 }
 .goal-item.done .goal-check { background: var(--green); border-color: var(--green); color: #000; }
@@ -824,7 +847,7 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
 }
 .recent-text { flex: 1; overflow: hidden; }
 .recent-eng { font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.recent-kor { font-size: 11px; color: var(--text-muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.recent-kor { font-size: 13px; color: var(--text-muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .quick-btn-grid {
   display: grid;
@@ -847,7 +870,7 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
 .quick-btn:active { transform: scale(0.97); background: var(--surface2); }
 .quick-btn-icon { font-size: 24px; }
 .quick-btn-text { font-size: 13px; font-weight: 600; color: var(--text); text-align: left; line-height: 1.3; }
-.quick-btn-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.quick-btn-sub { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
 
 /* ── STEP-BY-STEP TRANSLATE ── */
 .step-reveal {
@@ -907,8 +930,10 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
   font-family: inherit;
   text-align: left;
 }
-.quiz-inline-opt.correct { border-color: var(--green); background: rgba(86,211,100,0.1); color: var(--green); }
-.quiz-inline-opt.wrong { border-color: var(--accent3); background: rgba(255,107,157,0.1); color: var(--accent3); }
+.quiz-inline-opt.correct { border-color: var(--green); background: rgba(86,211,100,0.18); color: var(--green); font-weight:700; }
+.quiz-inline-opt.correct::after { content: ' ✅'; }
+.quiz-inline-opt.wrong { border-color: var(--accent3); background: rgba(255,107,157,0.15); color: var(--accent3); text-decoration:line-through; opacity:0.75; }
+.quiz-inline-opt.wrong::after { content: ' ❌'; text-decoration:none; display:inline-block; }
 
 .say-it-box {
   background: linear-gradient(135deg, rgba(124,111,247,0.1), rgba(78,205,196,0.1));
@@ -1010,7 +1035,7 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
 }
 .review-badge {
   display: inline-block; padding: 2px 8px;
-  border-radius: 6px; font-size: 10px; font-weight: 700;
+  border-radius: 6px; font-size: 12px; font-weight: 700;
   background: rgba(245,200,66,0.15); color: var(--gold);
   margin-bottom: 8px;
 }
@@ -1080,7 +1105,7 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
     <div style="text-align:center; margin-bottom:20px;">
       <div style="font-size:40px; margin-bottom:10px;">🔑</div>
       <div style="font-size:20px; font-weight:700; color:#fff; margin-bottom:8px;">Gemini API 키 입력</div>
-      <div style="font-size:13px; color:rgba(255,255,255,0.5); line-height:1.6;">
+      <div style="font-size:13px; color:var(--text-muted); line-height:1.6;">
         Google AI Studio에서 발급받은 API 키를 입력해주세요.<br>
         <span style="color:rgba(78,205,196,0.8);">키는 이 기기에만 저장되고 외부로 전송되지 않아요.</span>
       </div>
@@ -1095,7 +1120,7 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
       <button onclick="toggleApiKeyVisibility()" style="
         flex:0 0 auto; padding:10px 14px; background:rgba(255,255,255,0.05);
         border:1px solid rgba(255,255,255,0.1); border-radius:10px;
-        color:rgba(255,255,255,0.6); font-size:12px; cursor:pointer; font-family:inherit;">
+        color:var(--text-muted); font-size:12px; cursor:pointer; font-family:inherit;">
         👁 보기
       </button>
       <button onclick="saveApiKey()" style="
@@ -1106,7 +1131,7 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
       </button>
     </div>
     <div id="apiKeyError" style="color:#ff6b9d; font-size:12px; text-align:center; min-height:18px; margin-bottom:8px;"></div>
-    <div style="text-align:center; font-size:11px; color:rgba(255,255,255,0.3);">
+    <div style="text-align:center; font-size:13px; color:rgba(255,255,255,0.3);">
       키 발급: <a href="https://aistudio.google.com/app/apikey" target="_blank"
         style="color:rgba(124,111,247,0.8);">aistudio.google.com</a>
     </div>
@@ -1142,6 +1167,24 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
     <div class="stat-box">
       <div class="stat-num" id="statMastered">0</div>
       <div class="stat-label">마스터 단어</div>
+    </div>
+  </div>
+  <!-- 스토리지 관리 -->
+  <div style="padding:12px 16px; border-top:1px solid var(--border);">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+      <span style="font-size:13px; color:var(--text-muted); font-weight:600;">💾 저장공간</span>
+      <span style="font-size:13px; color:var(--text-muted);" id="storageUsageText">계산 중...</span>
+    </div>
+    <div style="background:var(--surface2); border-radius:4px; height:6px; overflow:hidden; margin-bottom:10px;">
+      <div id="storageUsageBar" style="height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); border-radius:4px; transition:width 0.5s; width:0%;"></div>
+    </div>
+    <div style="display:flex; gap:8px;">
+      <button onclick="clearAllStorage()" style="flex:1; padding:9px; background:rgba(255,107,157,0.12); border:1px solid rgba(255,107,157,0.3); border-radius:10px; color:#ff6b9d; font-size:12px; font-weight:700; cursor:pointer; font-family:inherit;">🗑 전체 비우기</button>
+      <button onclick="clearAnalysisOnly()" style="flex:1; padding:9px; background:rgba(245,200,66,0.1); border:1px solid rgba(245,200,66,0.25); border-radius:10px; color:var(--gold); font-size:12px; font-weight:700; cursor:pointer; font-family:inherit;">🧹 분석만 삭제</button>
+    </div>
+    <div style="display:flex; gap:8px; margin-top:8px;">
+      <button onclick="exportData()" style="flex:1; padding:9px; background:rgba(78,205,196,0.12); border:1px solid rgba(78,205,196,0.3); border-radius:10px; color:var(--accent2); font-size:12px; font-weight:700; cursor:pointer; font-family:inherit;">📤 내보내기</button>
+      <button onclick="importData()" style="flex:1; padding:9px; background:rgba(124,111,247,0.12); border:1px solid rgba(124,111,247,0.3); border-radius:10px; color:var(--accent); font-size:12px; font-weight:700; cursor:pointer; font-family:inherit;">📥 가져오기</button>
     </div>
   </div>
 </div>
@@ -1194,7 +1237,7 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
           <div class="streak-best" id="streakBest">최고 기록: 0일</div>
         </div>
         <div style="text-align:right;">
-          <div style="font-size:11px; color:var(--text-muted); margin-bottom:4px;">오늘</div>
+          <div style="font-size:13px; color:var(--text-muted); margin-bottom:4px;">오늘</div>
           <div id="todayDoneIcon" style="font-size:28px;">⭕</div>
         </div>
       </div>
@@ -1275,7 +1318,7 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
       <div class="section-label" style="margin-bottom:10px;">최근 저장 문장</div>
       <div class="recent-card">
         <div id="homeRecentList">
-          <div style="text-align:center; padding:20px 0; color:var(--text-muted); font-size:13px;">아직 저장한 문장이 없어요.<br>분석탭에서 문장을 배우고 저장해보세요!</div>
+          <div style="text-align:center; padding:20px 0; color:var(--text-muted); font-size:14px;">아직 저장한 문장이 없어요.<br>분석탭에서 문장을 배우고 저장해보세요!</div>
         </div>
       </div>
     </div>
@@ -1320,7 +1363,7 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
                 <div class="score-bar-bg"><div class="score-bar-fill" id="scoreBarFill" style="width:0%"></div></div>
                 <div class="score-num" id="scoreNum">0%</div>
               </div>
-              <div id="scoreComment" style="font-size:12px; color:var(--text-muted); margin-top:6px; text-align:center;"></div>
+              <div id="scoreComment" style="font-size:14px; color:var(--text-muted); margin-top:6px; text-align:center;"></div>
             </div>
           </div>
           <button class="reveal-btn" id="revealBtn2" onclick="revealStep(2)">
@@ -1432,7 +1475,7 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
       <div id="snapWriteArea" style="display:none;">
         <div class="card" style="margin-top:14px; border-top:3px solid var(--accent2);">
           <div class="section-label">✏️ 이 사진으로 영어 문장 써보기</div>
-          <p style="font-size:13px; color:var(--text-muted); margin-bottom:10px; line-height:1.6;">
+          <p style="font-size:14px; color:var(--text-muted); margin-bottom:10px; line-height:1.6;">
             위에서 배운 단어를 써서 짧은 영어 문장을 만들어보세요!<br>
             <span style="color:var(--accent2);">틀려도 괜찮아요 — AI가 교정해줘요 😊</span>
           </p>
@@ -1521,7 +1564,7 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
       <div class="card" style="margin-bottom:14px;">
         <div class="section-label">🎵 가수 또는 곡명 입력</div>
         <input type="text" class="input-field" id="lyricsArtist" placeholder="예: The Beatles, Adele, BTS...">
-        <div style="font-size:12px; color:var(--text-muted); margin-top:-6px; margin-bottom:12px; padding: 6px 10px; background:rgba(78,205,196,0.1); border-radius:8px; border-left:3px solid var(--accent2);">
+        <div style="font-size:14px; color:var(--text-muted); margin-top:-6px; margin-bottom:12px; padding: 6px 10px; background:rgba(78,205,196,0.1); border-radius:8px; border-left:3px solid var(--accent2);">
           💡 LP 컬렉션 아티스트를 입력하면 더욱 친숙하게 배울 수 있어요
         </div>
         <button class="btn-primary" style="background: linear-gradient(135deg, var(--accent2), #2dba72);" onclick="runLyrics()">🎵 오늘의 가사 한 줄 배우기</button>
@@ -1540,7 +1583,7 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
     <div class="tab-panel" id="tab-review">
       <div style="padding-top:8px;">
         <div class="section-label">🔁 망각곡선 복습</div>
-        <p style="font-size:13px; color:var(--text-muted); margin-bottom:14px; line-height:1.6;">
+        <p style="font-size:14px; color:var(--text-muted); margin-bottom:14px; line-height:1.6;">
           저장한 문장 중 복습할 시간이 된 것들이에요.<br>
           기억나면 ✅, 모르면 🔄를 눌러주세요.
         </p>
@@ -1553,7 +1596,7 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
         <div id="reviewDoneMsg" style="display:none; text-align:center; padding:32px 0;">
           <div style="font-size:48px; margin-bottom:12px;">🎉</div>
           <div style="font-size:16px; font-weight:700; color:var(--green); margin-bottom:6px;">오늘 복습 완료!</div>
-          <div style="font-size:13px; color:var(--text-muted);">다음 복습 문장이 생기면 알려드릴게요.</div>
+          <div style="font-size:14px; color:var(--text-muted);">다음 복습 문장이 생기면 알려드릴게요.</div>
         </div>
       </div>
     </div>
@@ -1584,11 +1627,11 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <div>
               <div style="font-size:32px; font-weight:700; color:var(--gold); font-family:'DM Serif Display',serif;" id="statStreak">0</div>
-              <div style="font-size:12px; color:var(--text-muted);">현재 연속 학습일</div>
+              <div style="font-size:14px; color:var(--text-muted);">현재 연속 학습일</div>
             </div>
             <div style="text-align:right;">
               <div style="font-size:22px; font-weight:700; color:var(--accent);" id="statBest">0</div>
-              <div style="font-size:12px; color:var(--text-muted);">최고 기록</div>
+              <div style="font-size:14px; color:var(--text-muted);">최고 기록</div>
             </div>
           </div>
         </div>
@@ -1603,7 +1646,7 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
         <div class="card" style="margin-bottom:14px;">
           <div class="section-label">📅 최근 30일 학습 기록</div>
           <div class="heatmap-wrap" id="heatmapArea"></div>
-          <div style="display:flex; gap:6px; align-items:center; margin-top:8px; font-size:11px; color:var(--text-muted);">
+          <div style="display:flex; gap:6px; align-items:center; margin-top:8px; font-size:13px; color:var(--text-muted);">
             <span>적음</span>
             <div style="width:12px;height:12px;border-radius:2px;background:var(--surface2);"></div>
             <div style="width:12px;height:12px;border-radius:2px;" class="heatmap-cell lv1"></div>
@@ -1666,19 +1709,70 @@ textarea.input-field { height: 130px; resize: none; line-height: 1.6; }
 //  CONFIG  (API 키를 여기에 입력하세요)
 // ══════════════════════════════════════
 let API_KEY = localStorage.getItem('snowTutorApiKey') || '';
-const MODEL  = "gemini-3-flash-preview"; // ✅ 올바른 모델명 유지
+const MODEL  = "gemini-3-flash-preview";
+
+// ══════════════════════════════════════
+//  INDEXEDDB 설정
+// ══════════════════════════════════════
+const DB_NAME    = 'snowTutorDB';
+const DB_VERSION = 1;
+const STORE_MAIN = 'mainStore'; // key-value 방식
+
+let db = null;
+
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, DB_VERSION);
+    req.onupgradeneeded = e => {
+      const d = e.target.result;
+      if (!d.objectStoreNames.contains(STORE_MAIN)) {
+        d.createObjectStore(STORE_MAIN);
+      }
+    };
+    req.onsuccess = e => { db = e.target.result; resolve(db); };
+    req.onerror   = e => reject(e.target.error);
+  });
+}
+
+function dbGet(key) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_MAIN, 'readonly');
+    const req = tx.objectStore(STORE_MAIN).get(key);
+    req.onsuccess = e => resolve(e.target.result ?? null);
+    req.onerror   = e => reject(e.target.error);
+  });
+}
+
+function dbSet(key, value) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_MAIN, 'readwrite');
+    const req = tx.objectStore(STORE_MAIN).put(value, key);
+    req.onsuccess = () => resolve(true);
+    req.onerror   = e => reject(e.target.error);
+  });
+}
+
+function dbDel(key) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_MAIN, 'readwrite');
+    const req = tx.objectStore(STORE_MAIN).delete(key);
+    req.onsuccess = () => resolve(true);
+    req.onerror   = e => reject(e.target.error);
+  });
+}
 
 // ══════════════════════════════════════
 //  STATE
 // ══════════════════════════════════════
 let currentEngSentence = "";
 let currentKorInput    = "";
+let currentAnalysisResult = null;
 let currentWordData    = null;
 let currentLevel       = "beginner";
 let currentSaveTab     = "sentence";
-let seenWords          = JSON.parse(localStorage.getItem('seenWords') || '[]');
-let masteredWords      = JSON.parse(localStorage.getItem('masteredWords') || '[]');
-let snowStorage        = JSON.parse(localStorage.getItem('snowStorage') || '{"sentence":[],"word":[]}');
+let seenWords          = [];
+let masteredWords      = [];
+let snowStorage        = { sentence: [], word: [] };
 let currentWordModal   = null;
 let snapBase64         = null;
 let snapMimeType       = "";
@@ -1687,16 +1781,16 @@ let currentMovieGenre  = "thriller";
 let currentMovieGenreKor = "스릴러";
 
 // ── 스트릭 & 목표 ──
-let streakData = JSON.parse(localStorage.getItem('streakData') || '{"days":0,"best":0,"lastDate":"","todayDone":false}');
-let todayGoals = JSON.parse(localStorage.getItem('todayGoals') || '{"translate":false,"word":false,"quiz":false,"any":false}');
+let streakData = { days:0, best:0, lastDate:'', todayDone:false };
+let todayGoals = { translate:false, word:false, quiz:false, any:false };
 const todayStr = new Date().toLocaleDateString('ko-KR');
 
 // ── 복습 & 통계 ──
 let reviewQueue = [];
 let reviewIdx = 0;
 let reviewFlipped = false;
-let tabUsage = JSON.parse(localStorage.getItem('tabUsage') || '{}');
-let learningLog = JSON.parse(localStorage.getItem('learningLog') || '{}');
+let tabUsage    = {};
+let learningLog = {};
 
 // ══════════════════════════════════════
 //  GEMINI API
@@ -1762,15 +1856,59 @@ function getApiErrorMsg(e) {
 // ══════════════════════════════════════
 //  SPEECH
 // ══════════════════════════════════════
+let ttsUnlocked = false;
+
+// iOS Safari: 최초 사용자 터치 시 TTS 잠금 해제
+document.addEventListener('touchstart', function unlockTTS() {
+  if (ttsUnlocked) return;
+  const u = new SpeechSynthesisUtterance('');
+  window.speechSynthesis.speak(u);
+  ttsUnlocked = true;
+  document.removeEventListener('touchstart', unlockTTS);
+}, { once: true });
+
 function speakText(t, rate = 0.9) {
   if (!t) return;
+  // 한국어 괄호 해석만 제거 (영어 문장 내 괄호는 유지)
+  const cleaned = t.replace(/\s*\([^)]*[\uAC00-\uD7A3][^)]*\)/g, '').trim();
+  if (!cleaned) return;
+
   window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(t.replace(/\(.*?\)/g,'').trim());
-  u.lang = 'en-US'; u.rate = rate;
-  window.speechSynthesis.speak(u);
+
+  // 안드로이드 크롬: cancel() 직후 speak()가 무시되는 버그 방지 → 짧은 딜레이
+  setTimeout(() => {
+    const u = new SpeechSynthesisUtterance(cleaned);
+    u.lang = 'en-US';
+    u.rate = rate;
+
+    // 200자 이상 긴 텍스트는 문장 단위로 분할 (iOS/안드로이드 공통 버그 방지)
+    if (cleaned.length > 200) {
+      const sentences = cleaned.match(/[^.!?]+[.!?]*/g) || [cleaned];
+      let delay = 0;
+      sentences.forEach(s => {
+        setTimeout(() => {
+          const su = new SpeechSynthesisUtterance(s.trim());
+          su.lang = 'en-US'; su.rate = rate;
+          window.speechSynthesis.speak(su);
+        }, delay);
+        delay += (s.length / 10) * 1000 / rate;
+      });
+      return;
+    }
+    window.speechSynthesis.speak(u);
+  }, 50);
 }
 function speakCurrentSpeed(rate) {
   if (currentEngSentence) speakText(currentEngSentence, rate);
+}
+
+// 자동재생 대신 버튼을 눌렀을 때만 재생 (iOS 차단 방지)
+// speakAuto: 사용자 직접 탭이 아닌 자동 호출용 — iOS에선 무시
+function speakAuto(t, rate = 0.9) {
+  // 데스크탑에서는 자동재생 허용, iOS/모바일에서는 스킵
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  if (isIOS) return; // iOS는 사용자 터치 없이 재생 불가
+  speakText(t, rate);
 }
 
 // ══════════════════════════════════════
@@ -1845,6 +1983,7 @@ function revealStep(stepNum) {
 
 function renderTranslate(res) {
   currentEngSentence = res.eng;
+  currentAnalysisResult = res;  // ← 분석 결과 임시 보관
 
   // 모든 step 블록 초기화
   for (let i = 2; i <= 7; i++) {
@@ -1867,7 +2006,7 @@ function renderTranslate(res) {
 
   // 직독직해
   const parts = (res.chunks || '').split('/');
-  let chunkHTML = '<span style="color:var(--text-muted); font-size:12px; font-weight:600; letter-spacing:0.5px;">직독직해 코칭</span><br>';
+  let chunkHTML = '<span style="color:var(--text-muted); font-size:14px; font-weight:600; letter-spacing:0.5px;">직독직해 코칭</span><br>';
   for (let i = 0; i < parts.length; i += 2) {
     const eng = parts[i] || '';
     const kor = parts[i+1] || '';
@@ -1888,10 +2027,10 @@ function renderTranslate(res) {
         ${d.tip ? '' : ''}
       </div>
       <div style="font-size:14px; color:var(--text); margin-bottom:4px; font-weight:600;">${d.mean}</div>
-      ${d.tip ? `<div style="font-size:12px; color:var(--text-muted); line-height:1.6; background:var(--surface); padding:8px 10px; border-radius:8px; margin-top:4px;">💡 ${d.tip}</div>` : ''}
+      ${d.tip ? `<div style="font-size:14px; color:var(--text-muted); line-height:1.6; background:var(--surface); padding:8px 10px; border-radius:8px; margin-top:4px;">💡 ${d.tip}</div>` : ''}
     </div>`;
   });
-  document.getElementById('dictArea').innerHTML = dictHTML || '<div style="color:var(--text-muted); font-size:13px;">단어 정보를 불러오지 못했어요.</div>';
+  document.getElementById('dictArea').innerHTML = dictHTML || '<div style="color:var(--text-muted); font-size:14px;">단어 정보를 불러오지 못했어요.</div>';
 
   // ③ 문법 가이드
   let guidesHTML = '';
@@ -1906,7 +2045,7 @@ function renderTranslate(res) {
   document.getElementById('guidesArea').innerHTML = guidesHTML;
 
   // ④ 예문
-  let sHTML = `<div style="margin-bottom:12px;"><span class="badge badge-basic">🌱 Basic</span><span style="font-size:12px; color:var(--text-muted); margin-left:6px;">기본 예문</span></div>`;
+  let sHTML = `<div style="margin-bottom:12px;"><span class="badge badge-basic">🌱 Basic</span><span style="font-size:14px; color:var(--text-muted); margin-left:6px;">기본 예문</span></div>`;
   (res.samples_basic || []).forEach(s => {
     const eng = s.split('(')[0].trim();
     const kor = s.includes('(') ? s.slice(s.indexOf('(')+1, s.lastIndexOf(')')) : '';
@@ -1915,7 +2054,7 @@ function renderTranslate(res) {
       ${kor ? `<div class="example-kor">${kor}</div>` : ''}
     </div>`;
   });
-  sHTML += `<div style="margin:14px 0 12px;"><span class="badge badge-up">🚀 Step Up</span><span style="font-size:12px; color:var(--text-muted); margin-left:6px;">심화 예문</span></div>`;
+  sHTML += `<div style="margin:14px 0 12px;"><span class="badge badge-up">🚀 Step Up</span><span style="font-size:14px; color:var(--text-muted); margin-left:6px;">심화 예문</span></div>`;
   (res.samples_up || []).forEach(s => {
     const eng = s.split('(')[0].trim();
     const kor = s.includes('(') ? s.slice(s.indexOf('(')+1, s.lastIndexOf(')')) : '';
@@ -1946,10 +2085,10 @@ function renderTranslate(res) {
       mistakesHTML += `<div style="padding:10px 0; border-bottom:1px solid rgba(255,107,157,0.1);">
         <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px; flex-wrap:wrap;">
           <span style="color:var(--accent3); font-size:13px; font-weight:600;">❌ ${m.wrong}</span>
-          <span style="color:var(--text-muted); font-size:12px;">→</span>
+          <span style="color:var(--text-muted); font-size:14px;">→</span>
           <span style="color:var(--green); font-size:13px; font-weight:600;">✅ ${m.right}</span>
         </div>
-        <div style="font-size:12px; color:var(--text-muted); line-height:1.6; padding:6px 8px; background:var(--surface); border-radius:8px;">${m.why}</div>
+        <div style="font-size:14px; color:var(--text-muted); line-height:1.6; padding:6px 8px; background:var(--surface); border-radius:8px;">${m.why}</div>
       </div>`;
     });
     mistakesHTML += `</div>`;
@@ -1963,7 +2102,7 @@ function renderTranslate(res) {
     const rp = res.roleplay;
     roleHTML = `<div class="card" style="border-top:3px solid var(--accent3); margin-bottom:14px;">
       <div class="section-label">⑤ 실제 대화에서 써보기 🎭</div>
-      <div style="font-size:12px; color:var(--text-muted); margin-bottom:12px; padding:8px 10px; background:rgba(255,107,157,0.08); border-radius:8px;">
+      <div style="font-size:14px; color:var(--text-muted); margin-bottom:12px; padding:8px 10px; background:rgba(255,107,157,0.08); border-radius:8px;">
         📍 상황: ${rp.situation || ''}
       </div>
       <div style="display:flex; flex-direction:column; gap:10px;">`;
@@ -1971,7 +2110,7 @@ function renderTranslate(res) {
       const isB = line.speaker === 'B';
       const safeLine = encodeURIComponent(line.line || '');
       roleHTML += `<div style="display:flex; flex-direction:column; align-items:${isB ? 'flex-end' : 'flex-start'};">
-        <div style="font-size:10px; color:var(--text-muted); margin-bottom:3px; font-weight:600;">${line.speaker}</div>
+        <div style="font-size:12px; color:var(--text-muted); margin-bottom:3px; font-weight:600;">${line.speaker}</div>
         <div onclick="speakText(decodeURIComponent('${safeLine}'), 0.9)" style="
           max-width:85%; padding:10px 14px;
           background:${isB ? 'rgba(124,111,247,0.15)' : 'var(--surface2)'};
@@ -1979,7 +2118,7 @@ function renderTranslate(res) {
           border-radius:${isB ? '16px 16px 4px 16px' : '16px 16px 16px 4px'};
           cursor:pointer;">
           <div style="font-size:14px; font-weight:600; color:var(--text); margin-bottom:3px;">${line.line} 🔊</div>
-          <div style="font-size:11px; color:var(--text-muted);">${line.kor}</div>
+          <div style="font-size:13px; color:var(--text-muted);">${line.kor}</div>
         </div>
       </div>`;
     });
@@ -2004,7 +2143,7 @@ function renderTranslate(res) {
     ];
     let expandHTML = `<div class="card" style="border-top:3px solid var(--gold); margin-bottom:14px;">
       <div class="section-label" style="color:var(--gold);">🚀 확장 훈련 — 문장 변형 마스터</div>
-      <div style="font-size:12px; color:var(--text-muted); margin-bottom:14px; line-height:1.6;">같은 의미를 다양하게 표현해봐요. 탭하면 발음을 들을 수 있어요!</div>`;
+      <div style="font-size:14px; color:var(--text-muted); margin-bottom:14px; line-height:1.6;">같은 의미를 다양하게 표현해봐요. 탭하면 발음을 들을 수 있어요!</div>`;
     rows.forEach(r => {
       if (!r.val) return;
       const safe = encodeURIComponent(r.val);
@@ -2012,7 +2151,7 @@ function renderTranslate(res) {
         padding:12px; margin-bottom:8px;
         background:var(--surface2); border-radius:12px; cursor:pointer;
         border-left:3px solid var(--gold);">
-        <div style="font-size:10px; color:var(--gold); font-weight:700; margin-bottom:4px;">${r.label}</div>
+        <div style="font-size:12px; color:var(--gold); font-weight:700; margin-bottom:4px;">${r.label}</div>
         <div style="font-size:15px; font-weight:600; color:var(--text);">${r.val} 🔊</div>
       </div>`;
     });
@@ -2023,7 +2162,7 @@ function renderTranslate(res) {
 
   document.getElementById('transResult').style.display = 'block';
   document.getElementById('mainContent').scrollTop = 0;
-  speakText(res.eng, 0.9);
+  speakAuto(res.eng, 0.9);
   markGoalDone('translate');
 }
 
@@ -2033,6 +2172,11 @@ function checkQuizAns(chosen, correct) {
     if (i === correct) el.classList.add('correct');
     else if (i === chosen && chosen !== correct) el.classList.add('wrong');
   });
+  if (chosen === correct) {
+    showToast('🎉 정답이에요!');
+  } else {
+    showToast('❌ 오답이에요. 정답을 확인해보세요!');
+  }
 }
 
 function saveSentence() {
@@ -2042,11 +2186,85 @@ function saveSentence() {
     eng: currentEngSentence,
     date: new Date().toLocaleDateString('ko-KR'),
     savedAt: Date.now(),
-    reviewData: { level: 0, lastReview: Date.now() }
+    reviewData: { level: 0, lastReview: Date.now() },
+    analysis: currentAnalysisResult || null  // ← 분석 결과 통째로 저장
   });
-  saveStorage();
-  renderHome();
-  showToast("보관함에 저장했어요! ⭐");
+  const ok = saveStorage();
+  if (ok) {
+    renderHome();
+    showToast("보관함에 저장했어요! ⭐");
+  }
+}
+
+// ══════════════════════════════════════
+//  STORAGE 용량 관리
+// ══════════════════════════════════════
+function formatBytes(bytes) {
+  if (bytes < 1024) return bytes + 'B';
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + 'KB';
+  return (bytes / (1024 * 1024)).toFixed(2) + 'MB';
+}
+
+async function getIndexedDBSize() {
+  if (navigator.storage && navigator.storage.estimate) {
+    const est = await navigator.storage.estimate();
+    return { used: est.usage || 0, quota: est.quota || 0 };
+  }
+  return { used: 0, quota: 0 };
+}
+
+async function updateStorageUsageUI() {
+  const { used, quota } = await getIndexedDBSize();
+  const bar = document.getElementById('storageUsageBar');
+  const txt = document.getElementById('storageUsageText');
+  const pct = quota > 0 ? Math.min((used / quota) * 100, 100) : 0;
+  if (bar) {
+    bar.style.width = pct + '%';
+    bar.style.background = pct > 80
+      ? 'linear-gradient(90deg,#ff6b9d,#ff4444)'
+      : pct > 60
+        ? 'linear-gradient(90deg,var(--gold),#ff9944)'
+        : 'linear-gradient(90deg,var(--accent),var(--accent2))';
+  }
+  if (txt) {
+    const quotaStr = quota > 0 ? ` / ${formatBytes(quota)}` : '';
+    txt.textContent = `${formatBytes(used)}${quotaStr} (${Math.round(pct)}%)`;
+  }
+}
+
+function saveStorage() {
+  // 구버전 호환용 - 실제 저장은 async saveStorage()가 처리
+  // 이 함수는 동기 컨텍스트에서 호출될 때 사용
+  dbSet('snowStorage', snowStorage).then(() => {
+    updateSidebarStats();
+  });
+  return true;
+}
+
+function clearAllStorage() {
+  // 구버전 호환용 동기 래퍼
+  if (!confirm('⚠️ 저장된 문장, 단어, 분석 데이터가 모두 삭제돼요.\n정말 전체를 비울까요?')) return;
+  snowStorage = { sentence: [], word: [] };
+  dbSet('snowStorage', snowStorage).then(() => {
+    updateSidebarStats();
+    updateStorageUsageUI();
+    renderSaveList();
+    renderHome();
+    showToast('🗑 전체 보관함을 비웠어요');
+  });
+}
+
+function clearAnalysisOnly() {
+  if (!confirm('분석 탭에서 저장된 상세 분석 데이터(직독직해, 문법, 예문 등)만 삭제해요.\n문장과 단어는 그대로 남아요. 계속할까요?')) return;
+  snowStorage.sentence = snowStorage.sentence.map(s => {
+    const { analysis, ...rest } = s;
+    return rest;
+  });
+  dbSet('snowStorage', snowStorage).then(() => {
+    updateSidebarStats();
+    updateStorageUsageUI();
+    showToast('🧹 분석 데이터만 삭제했어요');
+  });
 }
 
 // ══════════════════════════════════════
@@ -2100,8 +2318,9 @@ function renderDiary(res) {
   const safeText = res.corrected.replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, ' ');
   const safeForAttr = encodeURIComponent(res.corrected);
   const wordHTML = res.corrected.split(' ').map(w => {
-    const clean = w.toLowerCase().replace(/[.,!?;:']/g,'');
-    return `<span class="word-tap" style="font-size:18px;" onclick="speakText('${clean}', 0.9)">${w}</span>`;
+    const clean = w.toLowerCase().replace(/[.,!?;:'"()]/g,'');
+    const safeClean = encodeURIComponent(clean);
+    return `<span class="word-tap" style="font-size:18px;" onclick="speakText(decodeURIComponent('${safeClean}'), 0.9)">${w}</span>`;
   }).join(' ');
 
   // 문법 포인트 카드
@@ -2124,7 +2343,7 @@ function renderDiary(res) {
           ✓ ${g.fixed || '-'} 🔊
         </div>
       </div>
-      <div style="font-size:13px; color:#ccc; line-height:1.7; margin-bottom:10px;">${g.why || ''}</div>
+      <div style="font-size:14px; color:var(--text-muted); line-height:1.7; margin-bottom:10px;">${g.why || ''}</div>
       ${g.pattern ? `<div style="background:rgba(124,111,247,0.1); border-radius:8px; padding:8px 12px; font-size:12px; color:var(--accent); font-weight:600;">
         💡 패턴: ${g.pattern}
       </div>` : ''}
@@ -2136,8 +2355,8 @@ function renderDiary(res) {
   (res.expressions || []).forEach(e => {
     exprHTML += `<div class="expr-pill" onclick="speakText('${e.eng.replace(/'/g,"\\'")}', 0.9)">
       <span style="color:var(--accent2); font-weight:600;">${e.eng}</span>
-      <span style="color:var(--text-muted); font-size:11px; margin-left:4px;">${e.kor}</span>
-      ${e.tip ? `<div style="font-size:10px; color:var(--text-muted); margin-top:3px;">${e.tip}</div>` : ''}
+      <span style="color:var(--text-muted); font-size:13px; margin-left:4px;">${e.kor}</span>
+      ${e.tip ? `<div style="font-size:12px; color:var(--text-muted); margin-top:3px;">${e.tip}</div>` : ''}
     </div>`;
   });
 
@@ -2148,9 +2367,9 @@ function renderDiary(res) {
       <div>
         <div style="display:flex; align-items:center; gap:8px;">
           <span class="snap-word-eng">${v.word}</span>
-          ${v.pos ? `<span style="font-size:10px; color:var(--gold); background:rgba(245,200,66,0.15); padding:2px 6px; border-radius:4px;">${v.pos}</span>` : ''}
+          ${v.pos ? `<span style="font-size:12px; color:var(--gold); background:rgba(245,200,66,0.15); padding:2px 6px; border-radius:4px;">${v.pos}</span>` : ''}
         </div>
-        ${v.pron ? `<div style="font-size:11px; color:var(--accent2); margin-top:1px;">[${v.pron}]</div>` : ''}
+        ${v.pron ? `<div style="font-size:13px; color:var(--accent2); margin-top:1px;">[${v.pron}]</div>` : ''}
         <div class="snap-word-kor">${v.mean}</div>
       </div>
       <span class="snap-speak">🔊</span>
@@ -2182,7 +2401,7 @@ function renderDiary(res) {
     </div>` : ''}
   `;
   area.style.display = 'block';
-  speakText(res.corrected, 0.9);
+  speakAuto(res.corrected, 0.9);
 }
 
 // ══════════════════════════════════════
@@ -2242,9 +2461,9 @@ function renderSnap(res) {
       <div>
         <div style="display:flex; align-items:center; gap:8px;">
           <span class="snap-word-eng">${w.eng}</span>
-          ${w.pos ? `<span style="font-size:10px; color:var(--gold); background:rgba(245,200,66,0.15); padding:2px 6px; border-radius:4px;">${w.pos}</span>` : ''}
+          ${w.pos ? `<span style="font-size:12px; color:var(--gold); background:rgba(245,200,66,0.15); padding:2px 6px; border-radius:4px;">${w.pos}</span>` : ''}
         </div>
-        ${w.pron ? `<div style="font-size:11px; color:var(--accent2); margin-top:2px;">[${w.pron}]</div>` : ''}
+        ${w.pron ? `<div style="font-size:13px; color:var(--accent2); margin-top:2px;">[${w.pron}]</div>` : ''}
         <div class="snap-word-kor">${w.kor}</div>
       </div>
       <span class="snap-speak">🔊</span>
@@ -2339,7 +2558,7 @@ async function getNextWord() {
     currentWordData = res;
     seenWords.push(res.word);
     if (seenWords.length > 200) seenWords = seenWords.slice(-200);
-    localStorage.setItem('seenWords', JSON.stringify(seenWords));
+    dbSet('seenWords', seenWords);
     renderWord(res);
   } catch(e) {
     document.getElementById('wordDisplay').innerHTML = `<div class="empty-state"><div class="empty-icon">😅</div><div class="empty-text">${getApiErrorMsg(e)}</div></div>`;
@@ -2352,14 +2571,14 @@ function renderWord(res) {
   const html = `
     <div class="card">
       <div class="word-hero">
-        <div class="word-main" onclick="speakText('${res.word}', 0.8)">${res.word} <span class="speak-big">🔊</span></div>
+        <div class="word-main" onclick="speakText(decodeURIComponent('${encodeURIComponent(res.word)}'), 0.8)">${res.word} <span class="speak-big">🔊</span></div>
         <div style="display:flex; align-items:center; justify-content:center; gap:10px; margin-top:6px; flex-wrap:wrap;">
           ${res.pron ? `<span style="font-size:15px; color:var(--accent2); font-family:monospace;">${res.pron}</span>` : ''}
-          ${res.pos ? `<span style="font-size:11px; color:var(--gold); background:rgba(245,200,66,0.15); padding:3px 8px; border-radius:6px; font-weight:700;">${res.pos}</span>` : ''}
+          ${res.pos ? `<span style="font-size:13px; color:var(--gold); background:rgba(245,200,66,0.15); padding:3px 8px; border-radius:6px; font-weight:700;">${res.pos}</span>` : ''}
         </div>
         <div class="word-mean">${res.mean}</div>
       </div>
-      ${res.tip ? `<div style="font-size:12px; color:var(--text-muted); background:var(--surface2); padding:10px 12px; border-radius:10px; margin-bottom:14px; line-height:1.6;">💡 ${res.tip}</div>` : ''}
+      ${res.tip ? `<div style="font-size:14px; color:var(--text-muted); background:var(--surface2); padding:10px 12px; border-radius:10px; margin-bottom:14px; line-height:1.6;">💡 ${res.tip}</div>` : ''}
       <div class="step-card step1">
         <div class="step-title">Step 1 · 기초</div>
         <div class="step-eng" onclick="speakText('${res.step1.eng.replace(/'/g,"\\'")}', 0.8)">${res.step1.eng} 🔊</div>
@@ -2389,7 +2608,7 @@ function markKnown() {
   if (!currentWordData) return;
   if (!masteredWords.includes(currentWordData.word)) {
     masteredWords.push(currentWordData.word);
-    localStorage.setItem('masteredWords', JSON.stringify(masteredWords));
+    dbSet('masteredWords', masteredWords);
     snowStorage.word.unshift({ word: currentWordData.word, mean: currentWordData.mean });
     saveStorage();
     showToast("'"+currentWordData.word+"' 마스터! ✅");
@@ -2460,11 +2679,22 @@ function checkQuizPanel(chosen, correct, exp) {
     else if (i === chosen && chosen !== correct) el.classList.add('wrong');
   });
   markGoalDone('quiz');
+  const isCorrect = chosen === correct;
+  if (isCorrect) {
+    showToast('🎉 정답이에요!');
+  } else {
+    showToast('❌ 오답! 초록색이 정답이에요');
+  }
   if (exp) {
     const expEl = document.createElement('div');
     expEl.className = 'card';
     expEl.style.marginTop = '12px';
-    expEl.innerHTML = `<div class="section-label">해설</div><div style="font-size:13px; color:#ccc; line-height:1.6;">${exp}</div>`;
+    expEl.style.borderLeft = `4px solid ${isCorrect ? 'var(--green)' : 'var(--accent3)'}`;
+    expEl.innerHTML = `
+      <div class="section-label" style="color:${isCorrect ? 'var(--green)' : 'var(--accent3)'};">
+        ${isCorrect ? '✅ 정답 해설' : '❌ 오답 해설 — 이렇게 기억해요'}
+      </div>
+      <div style="font-size:14px; color:var(--text-muted); line-height:1.6;">${exp}</div>`;
     document.getElementById('quizPanel').appendChild(expEl);
   }
 }
@@ -2531,24 +2761,30 @@ function switchSaveTab(tab) {
 }
 function renderSaveList() {
   const search = (document.getElementById('storageSearch').value || '').toLowerCase();
-  let items = snowStorage[currentSaveTab] || [];
-  if (search) items = items.filter(it =>
-    (it.kor && it.kor.toLowerCase().includes(search)) ||
-    (it.eng && it.eng.toLowerCase().includes(search)) ||
-    (it.word && it.word.toLowerCase().includes(search)) ||
-    (it.mean && it.mean.toLowerCase().includes(search))
+  const allItems = snowStorage[currentSaveTab] || [];
+  let filtered = allItems.map((item, i) => ({ item, i }));
+  if (search) filtered = filtered.filter(({ item }) =>
+    (item.kor && item.kor.toLowerCase().includes(search)) ||
+    (item.eng && item.eng.toLowerCase().includes(search)) ||
+    (item.word && item.word.toLowerCase().includes(search)) ||
+    (item.mean && item.mean.toLowerCase().includes(search))
   );
   const el = document.getElementById('saveListEl');
-  if (items.length === 0) {
-    el.innerHTML = `<div style="text-align:center; padding:32px 0; color:var(--text-muted); font-size:13px;">아직 저장된 내용이 없어요</div>`;
+  if (filtered.length === 0) {
+    el.innerHTML = `<div style="text-align:center; padding:32px 0; color:var(--text-muted); font-size:14px;">아직 저장된 내용이 없어요</div>`;
   } else {
-    el.innerHTML = items.map((item, i) => {
+    el.innerHTML = filtered.map(({ item, i }) => {
       if (currentSaveTab === 'sentence') {
+        const hasAnalysis = !!item.analysis;
         return `<div class="save-item">
           <button class="save-del" onclick="deleteItem('sentence',${i})">×</button>
           <div class="save-item-kor">${item.kor || ''}</div>
           <div class="save-item-eng" onclick="speakText('${(item.eng||'').replace(/'/g,"\\'")}', 0.9)">${item.eng || ''} 🔊</div>
-          ${item.date ? `<div style="font-size:10px; color:var(--text-muted); margin-top:4px;">${item.date}</div>` : ''}
+          ${item.date ? `<div style="font-size:12px; color:var(--text-muted); margin-top:4px;">${item.date}${hasAnalysis ? ' · <span style="color:var(--accent2);">분석 저장됨 ✓</span>' : ''}</div>` : ''}
+          <button onclick="reAnalyzeSentence('${(item.kor||'').replace(/'/g,"\\'")}', '${(item.eng||'').replace(/'/g,"\\'")}', ${i}); closeSidebar();"
+            style="margin-top:8px; width:100%; padding:7px; background:${hasAnalysis ? 'rgba(78,205,196,0.12)' : 'rgba(124,111,247,0.12)'}; border:1px solid ${hasAnalysis ? 'rgba(78,205,196,0.3)' : 'rgba(124,111,247,0.3)'}; border-radius:8px; color:${hasAnalysis ? 'var(--accent2)' : 'var(--accent)'}; font-size:12px; font-weight:600; cursor:pointer;">
+            ${hasAnalysis ? '📂 분석 내용 바로 보기' : '✨ 분석 다시 불러오기 (AI)'}
+          </button>
         </div>`;
       } else {
         return `<div class="save-item">
@@ -2560,6 +2796,57 @@ function renderSaveList() {
     }).join('');
   }
   updateSidebarStats();
+  updateStorageUsageUI();
+}
+
+// 사이드바에서 문장 선택 시 분석탭으로 이동해서 다시 분석
+async function reAnalyzeSentence(kor, eng, itemIndex) {
+  showTab('translate');
+  const inputEl = document.getElementById('transInput');
+  if (inputEl) inputEl.value = kor;
+  setTimeout(() => { document.getElementById('mainContent').scrollTop = 0; }, 100);
+
+  // 저장된 분석 결과가 있으면 AI 재호출 없이 바로 표시
+  const savedItem = snowStorage.sentence[itemIndex];
+  if (savedItem && savedItem.analysis) {
+    currentEngSentence = eng;
+    currentKorInput = kor;
+    currentAnalysisResult = savedItem.analysis;
+    renderTranslate(savedItem.analysis);
+    showToast('📂 저장된 분석 내용을 불러왔어요!');
+    return;
+  }
+
+  // 저장된 분석 결과 없으면 AI 재호출
+  setLoading('trans', true);
+  document.getElementById('transResult').style.display = 'none';
+
+  const prompt = `
+영한 AI 튜터. 한글 입력: "${kor}"
+아래 JSON을 정확히 반환해. 절대 JSON 외 다른 텍스트 없이.
+{
+  "eng": "${eng}",
+  "chunks": "단어/뜻/단어/뜻 형식으로 직독직해 (슬래시로 구분)",
+  "dictionary": [{"word":"단어","mean":"뜻","tip":"초보자를 위한 상세 설명 (문법용어 한글+영어 병기)","exs":["예문 (해석)"]}],
+  "guides": [{"title":"문법 포인트 (영어명)","desc":"초보자도 이해하는 쉬운 설명, 예시 포함"}],
+  "mistakes": [{"wrong":"초보자가 자주 틀리는 잘못된 표현","right":"올바른 표현","why":"왜 틀렸는지 한국어로 짧게"}],
+  "samples_basic": ["기본 예문1 (해석)", "기본 예문2 (해석)", "기본 예문3 (해석)"],
+  "samples_up": ["심화 예문1 (해석)", "심화 예문2 (해석)"],
+  "roleplay": {"situation":"상황 설명 (한국어, 짧게)","dialogue":[{"speaker":"A","line":"영어 대사","kor":"해석"},{"speaker":"B","line":"입력 문장과 유사한 영어 대사","kor":"해석"}]},
+  "expand": {"past":"과거형 문장","future":"미래형 문장","reason":"이유 추가 문장 (because ~)","negative":"부정형 문장","question":"의문형 문장"},
+  "quiz": {"q":"객관식 문제 (한글)", "opts": ["보기1","보기2","보기3","보기4"], "ans": 정답_인덱스_숫자}
+}
+`;
+
+  try {
+    const res = await callGemini(prompt);
+    renderTranslate(res);
+    showToast('✨ 분석 내용을 불러왔어요!');
+  } catch(e) {
+    alert(getApiErrorMsg(e));
+  } finally {
+    setLoading('trans', false);
+  }
 }
 
 function deleteItem(type, idx) {
@@ -2573,18 +2860,98 @@ function updateSidebarStats() {
   document.getElementById('statWords').innerText = snowStorage.word.length;
   document.getElementById('statMastered').innerText = masteredWords.length;
   document.getElementById('headerSaveCount').innerText = snowStorage.sentence.length + snowStorage.word.length;
+  updateStorageUsageUI();
 }
 
 // ══════════════════════════════════════
-//  STORAGE
+//  STORAGE (IndexedDB)
 // ══════════════════════════════════════
-function saveStorage() {
-  localStorage.setItem('snowStorage', JSON.stringify(snowStorage));
-  updateSidebarStats();
+async function saveStorage() {
+  try {
+    await dbSet('snowStorage', snowStorage);
+    updateSidebarStats();
+    updateStorageUsageUI();
+    return true;
+  } catch(e) {
+    showToast('❌ 저장 중 오류가 발생했어요');
+    return false;
+  }
 }
 
-// ══════════════════════════════════════
-//  LOADING HELPERS
+async function saveMisc() {
+  await dbSet('seenWords',   seenWords);
+  await dbSet('masteredWords', masteredWords);
+  await dbSet('streakData',  streakData);
+  await dbSet('todayGoals',  todayGoals);
+  await dbSet('lastGoalDate', todayStr);
+}
+
+async function clearAllStorage() {
+  if (!confirm('⚠️ 저장된 문장, 단어, 분석 데이터가 모두 삭제돼요.\n정말 전체를 비울까요?')) return;
+  snowStorage = { sentence: [], word: [] };
+  await saveStorage();
+  renderSaveList();
+  renderHome();
+  showToast('🗑 전체 보관함을 비웠어요');
+}
+
+async function clearAnalysisOnly() {
+  if (!confirm('분석 탭에서 저장된 상세 분석 데이터(직독직해, 문법, 예문 등)만 삭제해요.\n문장과 단어는 그대로 남아요. 계속할까요?')) return;
+  snowStorage.sentence = snowStorage.sentence.map(s => {
+    const { analysis, ...rest } = s;
+    return rest;
+  });
+  await saveStorage();
+  showToast('🧹 분석 데이터만 삭제했어요');
+}
+
+// ── 내보내기 / 가져오기 ──
+async function exportData() {
+  const payload = {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    snowStorage,
+    streakData,
+    masteredWords,
+    seenWords
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = `snow_tutor_backup_${new Date().toLocaleDateString('ko-KR').replace(/\./g,'-').replace(/ /g,'')}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('📤 백업 파일을 저장했어요!');
+}
+
+function importData() {
+  const input = document.createElement('input');
+  input.type  = 'file';
+  input.accept = '.json';
+  input.onchange = async e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    try {
+      const text = await file.text();
+      const payload = JSON.parse(text);
+      if (!payload.snowStorage || !payload.version) throw new Error('invalid');
+      if (!confirm(`백업 파일을 불러오면 현재 저장된 데이터가 덮어써져요.\n계속할까요?\n(문장 ${payload.snowStorage.sentence?.length || 0}개, 단어 ${payload.snowStorage.word?.length || 0}개)`)) return;
+      snowStorage   = payload.snowStorage;
+      streakData    = payload.streakData    || streakData;
+      masteredWords = payload.masteredWords || [];
+      seenWords     = payload.seenWords     || [];
+      await saveStorage();
+      await saveMisc();
+      renderHome();
+      renderSaveList();
+      showToast('📥 데이터를 성공적으로 불러왔어요!');
+    } catch(err) {
+      alert('❌ 파일을 읽을 수 없어요. SNOW Tutor에서 내보낸 백업 파일인지 확인해주세요.');
+    }
+  };
+  input.click();
+}
 // ══════════════════════════════════════
 function setLoading(prefix, on) {
   const bar = document.getElementById(prefix + 'LoadBar');
@@ -2614,21 +2981,16 @@ function showToast(msg) {
 //  STREAK & HOME DASHBOARD
 // ══════════════════════════════════════
 function initStreak() {
-  // 날짜가 바뀌면 todayGoals 초기화
-  const lastGoalDate = localStorage.getItem('lastGoalDate') || '';
+  const lastGoalDate = todayStr; // IndexedDB에서 이미 처리됨 (initApp 참고)
   if (lastGoalDate !== todayStr) {
     todayGoals = { translate: false, word: false, quiz: false, any: false };
-    localStorage.setItem('todayGoals', JSON.stringify(todayGoals));
-    localStorage.setItem('lastGoalDate', todayStr);
+    saveMisc();
   }
-
-  // 어제 학습했는지 체크해서 스트릭 연속 여부 판단
   if (streakData.lastDate !== todayStr) {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
     const yStr = yesterday.toLocaleDateString('ko-KR');
     if (streakData.lastDate !== yStr && streakData.lastDate !== '') {
-      // 어제도 아니고 오늘도 아니면 스트릭 초기화
       streakData.days = 0;
     }
     streakData.todayDone = false;
@@ -2640,9 +3002,6 @@ function initStreak() {
 function markGoalDone(type) {
   if (todayGoals[type]) return;
   todayGoals[type] = true;
-  localStorage.setItem('todayGoals', JSON.stringify(todayGoals));
-
-  // 모든 목표 완료 시 스트릭 증가
   const allDone = Object.values(todayGoals).every(v => v);
   if (allDone && !streakData.todayDone) {
     streakData.days += 1;
@@ -2652,11 +3011,12 @@ function markGoalDone(type) {
     saveStreak();
     showToast('🔥 오늘 목표 완료! 스트릭 ' + streakData.days + '일!');
   }
+  saveMisc();
   renderHome();
 }
 
 function saveStreak() {
-  localStorage.setItem('streakData', JSON.stringify(streakData));
+  dbSet('streakData', streakData);
 }
 
 function renderHome() {
@@ -2699,7 +3059,7 @@ function renderHome() {
   const listEl = document.getElementById('homeRecentList');
   const recent = snowStorage.sentence.slice(0, 4);
   if (recent.length === 0) {
-    listEl.innerHTML = `<div style="text-align:center; padding:20px 0; color:var(--text-muted); font-size:13px;">아직 저장한 문장이 없어요.<br>분석탭에서 문장을 저장해보세요!</div>`;
+    listEl.innerHTML = `<div style="text-align:center; padding:20px 0; color:var(--text-muted); font-size:14px;">아직 저장한 문장이 없어요.<br>분석탭에서 문장을 저장해보세요!</div>`;
   } else {
     const colors = ['rgba(124,111,247,0.15)', 'rgba(78,205,196,0.15)', 'rgba(245,200,66,0.15)', 'rgba(255,107,157,0.15)'];
     const icons = ['✨', '✍️', '📖', '⚡'];
@@ -2716,18 +3076,52 @@ function renderHome() {
 }
 
 // ══════════════════════════════════════
-//  INIT
+//  INIT — IndexedDB에서 데이터 로드 후 앱 시작
 // ══════════════════════════════════════
-updateSidebarStats();
-initStreak();
-initNavDrag();
-renderReview();
-renderStats();
+async function initApp() {
+  try {
+    await openDB();
 
-// API 키 없으면 모달 자동 표시
-if (!API_KEY) {
-  setTimeout(() => openApiKeyModal(), 500);
+    // IndexedDB에서 모든 데이터 로드
+    const [stor, streak, goals, seen, mastered, tab, log, lastGoal] = await Promise.all([
+      dbGet('snowStorage'),
+      dbGet('streakData'),
+      dbGet('todayGoals'),
+      dbGet('seenWords'),
+      dbGet('masteredWords'),
+      dbGet('tabUsage'),
+      dbGet('learningLog'),
+      dbGet('lastGoalDate'),
+    ]);
+
+    if (stor)     snowStorage   = stor;
+    if (streak)   streakData    = streak;
+    if (goals)    todayGoals    = goals;
+    if (seen)     seenWords     = seen;
+    if (mastered) masteredWords = mastered;
+    if (tab)      tabUsage      = tab;
+    if (log)      learningLog   = log;
+
+    // 날짜 바뀌면 목표 초기화
+    if (lastGoal && lastGoal !== todayStr) {
+      todayGoals = { translate: false, word: false, quiz: false, any: false };
+      saveMisc();
+    }
+
+  } catch(e) {
+    console.warn('IndexedDB 로드 실패, 빈 상태로 시작:', e);
+  }
+
+  updateSidebarStats();
+  initStreak();
+  initNavDrag();
+  renderReview();
+  renderStats();
+
+  if (!API_KEY) setTimeout(() => openApiKeyModal(), 500);
 }
+
+initApp();
 
 // ══════════════════════════════════════
 //  API KEY MODAL
@@ -2851,7 +3245,7 @@ function renderSnapWrite(res) {
         <span style="color:var(--text-muted);">→</span>
         <span style="color:var(--green); font-weight:700; font-size:13px;">${p.right}</span>
       </div>
-      <div style="font-size:12px; color:var(--text-muted);">${p.why}</div>
+      <div style="font-size:14px; color:var(--text-muted);">${p.why}</div>
     </div>`;
   });
 
@@ -2860,11 +3254,11 @@ function renderSnapWrite(res) {
       ${res.is_correct
         ? `<div style="padding:10px 12px; background:rgba(86,211,100,0.1); border:1px solid var(--green); border-radius:10px; font-size:13px; color:var(--green); font-weight:600; margin-bottom:10px;">✅ 정확한 문장이에요!</div>`
         : `<div style="padding:10px 12px; background:rgba(124,111,247,0.1); border:1px solid var(--accent); border-radius:10px; margin-bottom:10px;">
-            <div style="font-size:11px; color:var(--text-muted); margin-bottom:4px;">교정된 문장</div>
+            <div style="font-size:13px; color:var(--text-muted); margin-bottom:4px;">교정된 문장</div>
             <div style="font-size:16px; font-weight:700; color:var(--text); cursor:pointer;" onclick="speakText(decodeURIComponent('${safeEng}'), 0.9)">${res.corrected} 🔊</div>
           </div>`
       }
-      <div style="font-size:13px; color:var(--text-muted); line-height:1.7; margin-bottom:10px;">${res.feedback}</div>
+      <div style="font-size:14px; color:var(--text-muted); line-height:1.7; margin-bottom:10px;">${res.feedback}</div>
       ${pointsHTML ? `<div style="margin-bottom:10px;">${pointsHTML}</div>` : ''}
       ${res.better ? `<div style="padding:8px 12px; background:rgba(78,205,196,0.1); border-radius:8px; font-size:13px; color:var(--accent2); margin-bottom:10px;">💬 더 자연스럽게: <strong>${res.better}</strong></div>` : ''}
       <div style="font-size:13px; color:var(--gold); text-align:center; padding:8px; font-weight:600;">✨ ${res.encouragement}</div>
@@ -2980,12 +3374,16 @@ function startRecording() {
     isRecording = false;
     btn.innerHTML = '🎤 따라 말하고 채점받기';
     btn.classList.remove('recording');
+    if (e.error === 'not-allowed') {
+      showMicPermissionGuide();
+      box.style.display = 'none';
+      return;
+    }
     const errMap = {
-      'not-allowed': '❌ 마이크 권한이 거부됐어요.\n브라우저 주소창 왼쪽 🔒 아이콘을 눌러서 마이크 권한을 허용해주세요.',
-      'no-speech': '🔇 소리가 감지되지 않았어요. 마이크에 가까이 대고 다시 시도해보세요.',
+      'no-speech':     '🔇 소리가 감지되지 않았어요. 마이크에 가까이 대고 다시 시도해보세요.',
       'audio-capture': '🎙️ 마이크를 찾을 수 없어요. 마이크가 연결되어 있는지 확인해주세요.',
-      'network': '🌐 네트워크 오류예요. 인터넷 연결을 확인해주세요.',
-      'aborted': '중단됐어요. 다시 시도해보세요.',
+      'network':       '🌐 네트워크 오류예요. 인터넷 연결을 확인해주세요.',
+      'aborted':       '중단됐어요. 다시 시도해보세요.',
     };
     box.style.display = 'block';
     box.textContent = errMap[e.error] || `오류: ${e.error} — 다시 시도해보세요.`;
@@ -2999,6 +3397,79 @@ function startRecording() {
     btn.classList.remove('recording');
     box.textContent = '음성 인식 시작 실패: ' + e.message;
   }
+}
+
+function showMicPermissionGuide() {
+  const isIOS     = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const isSamsung = /SamsungBrowser/.test(navigator.userAgent);
+  const isChrome  = /Chrome/.test(navigator.userAgent) && !isSamsung;
+
+  let steps = '';
+  let title  = '🎙️ 마이크 권한을 허용해주세요';
+
+  if (isIOS) {
+    steps = `
+      <div style="font-size:14px; color:var(--text-muted); line-height:1.9;">
+        <b style="color:var(--accent2);">iPhone / iPad (Safari) 설정 방법</b><br><br>
+        1️⃣ 화면 하단 <b>공유 버튼 (□↑)</b> 탭<br>
+        → 또는 주소창 왼쪽 <b>AA 버튼</b> 탭<br><br>
+        2️⃣ <b>"웹사이트 설정"</b> 선택<br><br>
+        3️⃣ <b>마이크 → 허용</b> 으로 변경<br><br>
+        4️⃣ 페이지를 <b>새로고침</b> 후 다시 시도
+      </div>`;
+  } else if (isSamsung) {
+    steps = `
+      <div style="font-size:14px; color:var(--text-muted); line-height:1.9;">
+        <b style="color:var(--accent2);">삼성 인터넷 설정 방법</b><br><br>
+        1️⃣ 주소창 왼쪽 <b>🔒 자물쇠</b> 탭<br><br>
+        2️⃣ <b>"권한"</b> 항목에서 마이크 찾기<br><br>
+        3️⃣ <b>마이크 → 허용</b> 선택<br><br>
+        4️⃣ 페이지를 <b>새로고침</b> 후 다시 시도
+      </div>`;
+  } else if (isChrome) {
+    steps = `
+      <div style="font-size:14px; color:var(--text-muted); line-height:1.9;">
+        <b style="color:var(--accent2);">Chrome (안드로이드) 설정 방법</b><br><br>
+        1️⃣ 주소창 오른쪽 <b>⋮ 점 3개</b> 메뉴 탭<br><br>
+        2️⃣ <b>"설정" → "사이트 설정"</b> 선택<br><br>
+        3️⃣ <b>"마이크"</b> → 이 사이트 찾기<br><br>
+        4️⃣ <b>허용</b> 으로 변경 후 뒤로 가기<br><br>
+        5️⃣ 페이지를 <b>새로고침</b> 후 다시 시도<br><br>
+        <span style="color:var(--gold); font-size:13px;">💡 또는 주소창 왼쪽 🔒 아이콘을 탭해서<br>마이크 권한을 바로 변경할 수도 있어요.</span>
+      </div>`;
+  } else {
+    steps = `
+      <div style="font-size:14px; color:var(--text-muted); line-height:1.9;">
+        <b style="color:var(--accent2);">설정 방법</b><br><br>
+        1️⃣ 주소창 왼쪽 <b>🔒 아이콘</b> 탭<br><br>
+        2️⃣ <b>마이크 → 허용</b> 으로 변경<br><br>
+        3️⃣ 페이지를 <b>새로고침</b> 후 다시 시도
+      </div>`;
+  }
+
+  const el = document.createElement('div');
+  el.style.cssText = `
+    position:fixed; inset:0; z-index:99999;
+    background:rgba(0,0,0,0.85); backdrop-filter:blur(8px);
+    display:flex; align-items:center; justify-content:center; padding:20px;
+  `;
+  el.innerHTML = `
+    <div style="background:#1a1a24; border:1px solid rgba(124,111,247,0.4); border-radius:24px; padding:28px 24px; width:100%; max-width:360px;">
+      <div style="text-align:center; margin-bottom:18px;">
+        <div style="font-size:44px; margin-bottom:10px;">🎙️</div>
+        <div style="font-size:17px; font-weight:700; color:var(--text); margin-bottom:6px;">${title}</div>
+        <div style="font-size:13px; color:var(--text-muted);">마이크 권한이 차단돼 있어요</div>
+      </div>
+      <div style="background:var(--surface2); border-radius:14px; padding:16px; margin-bottom:16px;">
+        ${steps}
+      </div>
+      <button onclick="this.closest('div[style*=inset]').remove();"
+        style="width:100%; padding:13px; background:linear-gradient(135deg,var(--accent),#5d56d4); border:none; border-radius:12px; color:#fff; font-size:15px; font-weight:700; cursor:pointer; font-family:inherit;">
+        확인했어요
+      </button>
+    </div>
+  `;
+  document.body.appendChild(el);
 }
 
 function stopRecording() {
@@ -3052,9 +3523,9 @@ function scorePronunciation(original, spoken, confidence = 1.0) {
   const confText = confidence < 0.6 ? ` (인식 신뢰도: ${Math.round(confidence*100)}% — 발음을 더 또렷하게 해보세요)` : '';
 
   document.getElementById('transcriptBox').innerHTML =
-    `<div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">내가 말한 것:</div>` +
+    `<div style="font-size:13px;color:var(--text-muted);margin-bottom:4px;">내가 말한 것:</div>` +
     `<div style="color:var(--text);margin-bottom:8px;">${spoken}</div>` +
-    `<div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">원문 대조 <span style="font-size:10px;">(🟢맞음 🟡순서오류 🔴누락)</span>:</div>` +
+    `<div style="font-size:13px;color:var(--text-muted);margin-bottom:4px;">원문 대조 <span style="font-size:12px;">(🟢맞음 🟡순서오류 🔴누락)</span>:</div>` +
     resultWords.join(' ');
 
   const scoreArea = document.getElementById('scoreArea');
@@ -3113,7 +3584,7 @@ function showNextReview() {
   const remaining = reviewQueue.length - reviewIdx;
 
   panel.innerHTML = `
-    <div style="text-align:center; font-size:12px; color:var(--text-muted); margin-bottom:12px;">
+    <div style="text-align:center; font-size:14px; color:var(--text-muted); margin-bottom:12px;">
       남은 복습 <strong style="color:var(--accent);">${remaining}</strong>개
     </div>
     <div class="review-card">
@@ -3126,7 +3597,7 @@ function showNextReview() {
         <div class="review-answer" onclick="speakText('${(item.eng||'').replace(/'/g,"\\'")}', 0.9)">
           ${item.eng || ''} 🔊
         </div>
-        <div style="font-size:11px; color:var(--text-muted); text-align:center; margin-bottom:12px;">탭하면 발음을 들을 수 있어요</div>
+        <div style="font-size:13px; color:var(--text-muted); text-align:center; margin-bottom:12px;">탭하면 발음을 들을 수 있어요</div>
         <div class="review-btns">
           <button class="btn-review-ok" onclick="reviewResult(true)">✅ 기억했어요!</button>
           <button class="btn-review-again" onclick="reviewResult(false)">🔄 다시 볼게요</button>
@@ -3144,7 +3615,7 @@ function flipReview() {
   document.getElementById('reviewFlipBtn').style.display = 'none';
   reviewFlipped = true;
   const item = reviewQueue[reviewIdx];
-  speakText(item.eng, 0.9);
+  speakAuto(item.eng, 0.9);
 }
 
 function reviewResult(correct) {
@@ -3168,10 +3639,10 @@ function reviewResult(correct) {
 // ══════════════════════════════════════
 function logTabUsage(tabId) {
   tabUsage[tabId] = (tabUsage[tabId] || 0) + 1;
-  localStorage.setItem('tabUsage', JSON.stringify(tabUsage));
   const today = new Date().toLocaleDateString('ko-KR');
   learningLog[today] = (learningLog[today] || 0) + 1;
-  localStorage.setItem('learningLog', JSON.stringify(learningLog));
+  dbSet('tabUsage', tabUsage);
+  dbSet('learningLog', learningLog);
 }
 
 function renderStats() {
@@ -3277,7 +3748,7 @@ function renderMovieQuote(res) {
       <div>
         <span class="snap-word-eng">${v.word}</span>
         <div class="snap-word-kor">${v.mean}</div>
-        ${v.tip ? `<div style="font-size:11px; color:var(--text-muted); margin-top:2px;">${v.tip}</div>` : ''}
+        ${v.tip ? `<div style="font-size:13px; color:var(--text-muted); margin-top:2px;">${v.tip}</div>` : ''}
       </div>
       <span class="snap-speak">🔊</span>
     </div>`;
@@ -3297,7 +3768,7 @@ function renderMovieQuote(res) {
         <span style="font-size:24px;">🎬</span>
         <div>
           <div style="font-size:16px; font-weight:700; color:var(--text);">${res.movie || ''}</div>
-          <div style="font-size:12px; color:var(--text-muted);">${res.year || ''} · ${res.character || ''}</div>
+          <div style="font-size:14px; color:var(--text-muted);">${res.year || ''} · ${res.character || ''}</div>
         </div>
       </div>
       <div style="background:var(--surface2); border-radius:14px; padding:18px; margin-bottom:14px; border-left:4px solid var(--accent3); cursor:pointer;"
@@ -3315,7 +3786,7 @@ function renderMovieQuote(res) {
 
     ${res.why_famous ? `<div class="card card-accent-gold">
       <div class="section-label">이 대사가 유명한 이유</div>
-      <div style="font-size:13px; color:#ccc; line-height:1.7;">${res.why_famous}</div>
+      <div style="font-size:14px; color:var(--text-muted); line-height:1.7;">${res.why_famous}</div>
     </div>` : ''}
 
     ${vocabHTML ? `<div class="card card-accent-green">
@@ -3387,10 +3858,10 @@ function renderLyrics(res) {
       <div>
         <div style="display:flex; align-items:center; gap:8px;">
           <span class="snap-word-eng">${v.word}</span>
-          ${v.pos ? `<span style="font-size:10px; color:var(--gold); background:rgba(245,200,66,0.15); padding:2px 6px; border-radius:4px;">${v.pos}</span>` : ''}
+          ${v.pos ? `<span style="font-size:12px; color:var(--gold); background:rgba(245,200,66,0.15); padding:2px 6px; border-radius:4px;">${v.pos}</span>` : ''}
         </div>
         <div class="snap-word-kor">${v.mean}</div>
-        ${v.tip ? `<div style="font-size:11px; color:var(--text-muted); margin-top:2px;">${v.tip}</div>` : ''}
+        ${v.tip ? `<div style="font-size:13px; color:var(--text-muted); margin-top:2px;">${v.tip}</div>` : ''}
       </div>
       <span class="snap-speak">🔊</span>
     </div>`;
@@ -3410,7 +3881,7 @@ function renderLyrics(res) {
         <span style="font-size:24px;">🎵</span>
         <div>
           <div style="font-size:16px; font-weight:700; color:var(--text);">${res.song || ''}</div>
-          <div style="font-size:12px; color:var(--text-muted);">${res.artist || ''}</div>
+          <div style="font-size:14px; color:var(--text-muted);">${res.artist || ''}</div>
         </div>
       </div>
       <div style="background:var(--surface2); border-radius:14px; padding:18px; margin-bottom:14px; border-left:4px solid var(--accent2); cursor:pointer;"
@@ -3428,7 +3899,7 @@ function renderLyrics(res) {
 
     ${res.context ? `<div class="card card-accent-gold">
       <div class="section-label">이 가사의 의미</div>
-      <div style="font-size:13px; color:#ccc; line-height:1.7;">${res.context}</div>
+      <div style="font-size:14px; color:var(--text-muted); line-height:1.7;">${res.context}</div>
     </div>` : ''}
 
     ${vocabHTML ? `<div class="card card-accent-green">
@@ -3450,7 +3921,7 @@ function renderLyrics(res) {
   `;
 
   document.getElementById('lyricsResult').innerHTML = html;
-  speakText(res.line, 0.8);
+  speakAuto(res.line, 0.8);
   markGoalDone('any');
 }
 </script>
